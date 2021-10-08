@@ -1,7 +1,9 @@
 package com.example.nighty.controller;
 
 import com.example.nighty.Req.UserLoginReq;
+import com.example.nighty.Req.UserUpdateReq;
 import com.example.nighty.Resp.UserLoginResp;
+import com.example.nighty.Resp.UserUpdateResp;
 import com.example.nighty.common.ServerResponse;
 import com.example.nighty.domain.User;
 import com.example.nighty.service.UserService;
@@ -89,6 +91,24 @@ public class UserController {
         }
         return userService.resetPassword(passwordOld, passwordNew, user);
 
+    }
+
+    /**
+     * 更新用户信息
+     */
+    @RequestMapping(value = "update_information", method = RequestMethod.POST)
+    @ResponseBody
+    public ServerResponse<UserUpdateResp> update_information(HttpSession session, UserUpdateReq user) {
+        User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
+        if (currentUser == null) {
+            return ServerResponse.createByErrorMessage("用户未登录");
+        }
+
+        ServerResponse<UserUpdateResp> response = userService.updateInformation(user);
+        if (response.isSuccess()) {
+            session.setAttribute(Const.CURRENT_USER, response.getData());
+        }
+        return response;
     }
 
 }

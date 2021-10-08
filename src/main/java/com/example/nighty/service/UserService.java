@@ -1,7 +1,9 @@
 package com.example.nighty.service;
 
 import com.example.nighty.Req.UserLoginReq;
+import com.example.nighty.Req.UserUpdateReq;
 import com.example.nighty.Resp.UserLoginResp;
+import com.example.nighty.Resp.UserUpdateResp;
 import com.example.nighty.common.ServerResponse;
 import com.example.nighty.domain.User;
 import com.example.nighty.domain.UserExample;
@@ -155,4 +157,25 @@ public class UserService {
         return ServerResponse.createByErrorMessage("密码更新失败");
     }
 
+    /**
+     * 更新用户信息
+     */
+    public ServerResponse<UserUpdateResp> updateInformation(UserUpdateReq user) {
+        //需要校验mobile，校验新的mobile是否已存在，并且存在的mobile如果相同的话，不能是当前用户的
+        UserExample userExample = new UserExample();
+        UserExample.Criteria criteria = userExample.createCriteria();
+        criteria.andMobileEqualTo(user.getMobile());
+        List<User> userList = userMapper.selectByExample(userExample);
+        if (!CollectionUtils.isEmpty(userList) && userList.get(0).getId() != user.getId()) {
+            return ServerResponse.createByErrorMessage("mobile已存在，请更换mobile再尝试更新");
+        }
+        UserUpdateResp updateUser = CopyUtil.copy(user, UserUpdateResp.class);
+        User userNew = CopyUtil.copy(user, User.class);
+
+        int updateCount = userMapper.updateByPrimaryKeySelective(userNew);
+        if (updateCount > 0) {
+            return ServerResponse.createBySuccess("更新个人信息成功", updateUser);
+        }
+        return ServerResponse.createByErrorMessage("更新个人信息失败");
+    }
 }
