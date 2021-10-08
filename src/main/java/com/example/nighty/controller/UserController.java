@@ -71,10 +71,24 @@ public class UserController {
     public ServerResponse<UserLoginResp> getUserInfo(HttpSession session) {
         User user = (User) session.getAttribute(Const.CURRENT_USER);
         if (user != null) {
-            UserLoginResp userLoginResp = CopyUtil.copy(user,UserLoginResp.class);
-            return ServerResponse.createBySuccess("获取用户信息成功",userLoginResp);
+            UserLoginResp userLoginResp = CopyUtil.copy(user, UserLoginResp.class);
+            return ServerResponse.createBySuccess("获取用户信息成功", userLoginResp);
         }
         return ServerResponse.createByErrorMessage("用户未登录，无法获取当前用户信息");
+    }
+
+    /**
+     * 登录状态的重置密码
+     */
+    @RequestMapping(value = "reset_password", method = RequestMethod.POST)
+    @ResponseBody
+    public ServerResponse<String> resetPassword(HttpSession session, String passwordOld, String passwordNew) {
+        User user = (User) session.getAttribute(Const.CURRENT_USER);
+        if (user == null) {
+            return ServerResponse.createByErrorMessage("用户未登录");
+        }
+        return userService.resetPassword(passwordOld, passwordNew, user);
+
     }
 
 }

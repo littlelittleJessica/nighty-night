@@ -72,13 +72,13 @@ public class UserService {
         //MD5加密
         user.setPassword(MD5Util.MD5EncodeUtf8(user.getPassword()));
 
-        User userNew = CopyUtil.copy(user,User.class);
+        User userNew = CopyUtil.copy(user, User.class);
         int resultCount = userMapper.insertSelective(userNew);
         if (resultCount == 0) {
             return ServerResponse.createByErrorMessage("注册失败");
         }
-        UserLoginResp userLoginResp = CopyUtil.copy(user,UserLoginResp.class);
-        return ServerResponse.createBySuccess("注册成功",userLoginResp);
+        UserLoginResp userLoginResp = CopyUtil.copy(user, UserLoginResp.class);
+        return ServerResponse.createBySuccess("注册成功", userLoginResp);
     }
 
     /**
@@ -134,4 +134,25 @@ public class UserService {
             return userList.get(0);
         }
     }
+
+    /**
+     * 登录状态修改密码
+     */
+    public ServerResponse<String> resetPassword(String passwordOld, String passwordNew, User user) {
+
+
+        //防止横向越权，要校验一下这个用户的旧密码，一定要指定是这个用户，因为我们回查询出一个count(1)，如果不指定id，那么结果就是true（count>0）
+        String md5Password = MD5Util.MD5EncodeUtf8(passwordOld);
+        if (!user.getPassword().equals(md5Password)) {
+            return ServerResponse.createByErrorMessage("旧密码错误");
+        }
+
+        user.setPassword(MD5Util.MD5EncodeUtf8(passwordNew));
+        int updateCount = userMapper.updateByPrimaryKeySelective(user);
+        if (updateCount > 0) {
+            return ServerResponse.createBySuccessMessage("更新密码成功");
+        }
+        return ServerResponse.createByErrorMessage("密码更新失败");
+    }
+
 }
