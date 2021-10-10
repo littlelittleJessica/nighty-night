@@ -1,6 +1,7 @@
 package com.example.nighty.service;
 
 import com.example.nighty.Req.UserLoginReq;
+import com.example.nighty.Req.UserRegisterReq;
 import com.example.nighty.Req.UserUpdateReq;
 import com.example.nighty.Resp.UserLoginResp;
 import com.example.nighty.Resp.UserUpdateResp;
@@ -9,13 +10,13 @@ import com.example.nighty.domain.User;
 import com.example.nighty.domain.UserExample;
 import com.example.nighty.mapper.UserMapper;
 import com.example.nighty.util.CopyUtil;
-import com.example.nighty.util.MD5Util;
 import com.example.nighty.common.Const;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.DigestUtils;
 import org.springframework.util.ObjectUtils;
 
 import javax.annotation.Resource;
@@ -38,21 +39,21 @@ public class UserService {
     /**
      * 用户名登录
      */
-    public ServerResponse<User> loginByName(String username, String password) {
-        User userDB = selectByUsername(username);
+    public ServerResponse<UserLoginResp> login(UserLoginReq req) {
+        User userDB = selectByUsername(req.getUsername());
         if (ObjectUtils.isEmpty(userDB)) {
             //用户名不存在
-            LOG.info("用户名不存在，{}", username);
+            LOG.info("用户名不存在，{}", req.getUsername());
             return ServerResponse.createByErrorMessage("用户名不存在");
         } else {
-            String md5Password = MD5Util.MD5EncodeUtf8(password);
-            if (userDB.getPassword().equals(md5Password)) {
+            if (userDB.getPassword().equals(req.getPassword())) {
                 //登录成功
-                LOG.info("登录成功，用户名：{}，密码：{}", username, md5Password);
-                return ServerResponse.createBySuccess("登录成功", userDB);
+                LOG.info("登录成功，用户名：{}，密码：{}", req.getUsername(), req.getPassword());
+                UserLoginResp resp = CopyUtil.copy(userDB,UserLoginResp.class);
+                return ServerResponse.createBySuccess("登录成功", resp);
             } else {
                 //密码不正确
-                LOG.info("密码不正确，输入密码：{}，数据库密码：{}", password, userDB.getPassword());
+                LOG.info("密码不正确，输入密码：{}，数据库密码：{}", req.getPassword(), userDB.getPassword());
                 return ServerResponse.createByErrorMessage("密码错误");
             }
         }
@@ -62,7 +63,7 @@ public class UserService {
     /**
      * 用户注册
      */
-    public ServerResponse<UserLoginResp> register(UserLoginReq user) {
+    public ServerResponse<UserLoginResp> register(UserRegisterReq user) {
         ServerResponse validResponse = this.checkValid(user.getUsername(), Const.USERNAME);
         if (!validResponse.isSuccess()) {
             return validResponse;
@@ -72,7 +73,7 @@ public class UserService {
             return validResponse;
         }
         //MD5加密
-        user.setPassword(MD5Util.MD5EncodeUtf8(user.getPassword()));
+        user.setPassword(DigestUtils.md5DigestAsHex(user.getPassword().getBytes()));
 
         User userNew = CopyUtil.copy(user, User.class);
         int resultCount = userMapper.insertSelective(userNew);
@@ -141,15 +142,12 @@ public class UserService {
      * 登录状态修改密码
      */
     public ServerResponse<String> resetPassword(String passwordOld, String passwordNew, User user) {
-
-
         //防止横向越权，要校验一下这个用户的旧密码，一定要指定是这个用户，因为我们回查询出一个count(1)，如果不指定id，那么结果就是true（count>0）
-        String md5Password = MD5Util.MD5EncodeUtf8(passwordOld);
+        String md5Password = DigestUtils.md5DigestAsHex(passwordOld.getBytes());
         if (!user.getPassword().equals(md5Password)) {
             return ServerResponse.createByErrorMessage("旧密码错误");
         }
-
-        user.setPassword(MD5Util.MD5EncodeUtf8(passwordNew));
+        user.setPassword(DigestUtils.md5DigestAsHex(passwordNew.getBytes()));
         int updateCount = userMapper.updateByPrimaryKeySelective(user);
         if (updateCount > 0) {
             return ServerResponse.createBySuccessMessage("更新密码成功");

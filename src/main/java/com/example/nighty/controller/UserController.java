@@ -1,6 +1,8 @@
 package com.example.nighty.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.example.nighty.Req.UserLoginReq;
+import com.example.nighty.Req.UserRegisterReq;
 import com.example.nighty.Req.UserUpdateReq;
 import com.example.nighty.Resp.UserLoginResp;
 import com.example.nighty.Resp.UserUpdateResp;
@@ -9,12 +11,16 @@ import com.example.nighty.domain.User;
 import com.example.nighty.service.UserService;
 import com.example.nighty.util.CopyUtil;
 import com.example.nighty.common.Const;
+import com.example.nighty.util.SnowFlake;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @Description
@@ -31,17 +37,29 @@ public class UserController {
     @Resource
     private UserService userService;
 
+    @Resource
+    private SnowFlake snowFlake;
+
+    @Resource
+    private RedisTemplate redisTemplate;
+
     /**
      * 用户名登录
      */
     @RequestMapping(value = "login", method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse<User> login(String username, String password, HttpSession session) {
-        ServerResponse<User> response = userService.loginByName(username, password);
-        if (response.isSuccess()) {
-            session.setAttribute(Const.CURRENT_USER, response.getData());
+    public ServerResponse<UserLoginResp> login(UserLoginReq req) {
+        req.setPassword(DigestUtils.md5DigestAsHex(req.getPassword().getBytes()));
+        ServerResponse<UserLoginResp> resp = userService.login(req);
+        if (resp.isSuccess()) {
+            Long token = snowFlake.nextId();
+            LOG.info("生成单点登录token:{}，并放入redis中",token);
+            resp.getData().setToken(token.toString());
+            redisTemplate.opsForValue().set(token.toString(), JSONObject.toJSONString(resp),3600*24, TimeUnit.SECONDS);
+            //验证token是否已存放到redis中
+            LOG.info("key:{},value:{}", token, redisTemplate.opsForValue().get(token.toString()));
         }
-        return response;
+        return resp;
 
     }
 
@@ -50,8 +68,8 @@ public class UserController {
      */
     @RequestMapping(value = "logout", method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse<String> logout(HttpSession session) {
-        session.removeAttribute(Const.CURRENT_USER);
+    public ServerResponse<String> logout(String token) {
+        redisTemplate.delete(token);
         LOG.info("退出登录成功");
         return ServerResponse.createBySuccessMessage("退出登录成功");
     }
@@ -61,7 +79,7 @@ public class UserController {
      */
     @RequestMapping(value = "register", method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse<UserLoginResp> register(UserLoginReq user) {
+    public ServerResponse<UserLoginResp> register(UserRegisterReq user) {
         return userService.register(user);
     }
 
