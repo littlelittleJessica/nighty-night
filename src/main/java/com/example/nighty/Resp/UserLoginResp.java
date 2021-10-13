@@ -12,7 +12,7 @@ public class UserLoginResp {
 
     private String username;
 
-    private String mobile;
+    private String email;
 
     private String token;
 
@@ -24,12 +24,12 @@ public class UserLoginResp {
         this.username = username;
     }
 
-    public String getMobile() {
-        return mobile;
+    public String getEmail() {
+        return email;
     }
 
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public Long getId() {
@@ -53,7 +53,7 @@ public class UserLoginResp {
         final StringBuilder sb = new StringBuilder("UserLoginResp{");
         sb.append("id=").append(id);
         sb.append(", username='").append(username).append('\'');
-        sb.append(", mobile='").append(mobile).append('\'');
+        sb.append(", email='").append(email).append('\'');
         sb.append(", token='").append(token).append('\'');
         sb.append('}');
         return sb.toString();

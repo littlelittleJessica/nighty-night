@@ -14,8 +14,8 @@ public class UserRegisterReq {
     @NotEmpty(message = "Username can not be empty!")
     private String username;
 
-    @NotEmpty(message = "Mobile can not be empty!")
-    private String mobile;
+    @NotEmpty(message = "Email can not be empty!")
+    private String email;
 
     @NotNull(message = "Password can not be empty!")
     private String password;
@@ -28,12 +28,12 @@ public class UserRegisterReq {
         this.username = username;
     }
 
-    public String getMobile() {
-        return mobile;
+    public String getEmail() {
+        return email;
     }
 
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPassword() {

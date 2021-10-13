@@ -5,7 +5,7 @@
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="username" jdbcType="VARCHAR" property="username" />
     <result column="password" jdbcType="CHAR" property="password" />
-    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
     <result column="photo" jdbcType="VARCHAR" property="photo" />
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -67,7 +67,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, username, `password`, mobile, photo
+    id, username, `password`, email, photo
   </sql>
   <select id="selectByExample" parameterType="com.example.nighty.domain.UserExample" resultMap="BaseResultMap">
     select
@@ -101,9 +101,9 @@
   </delete>
   <insert id="insert" parameterType="com.example.nighty.domain.User">
     insert into user (id, username, `password`, 
-      mobile, photo)
+      email, photo)
     values (#{id,jdbcType=BIGINT}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=CHAR}, 
-      #{mobile,jdbcType=VARCHAR}, #{photo,jdbcType=VARCHAR})
+      #{email,jdbcType=VARCHAR}, #{photo,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.example.nighty.domain.User">
     insert into user
@@ -117,8 +117,8 @@
       <if test="password != null">
         `password`,
       </if>
-      <if test="mobile != null">
-        mobile,
+      <if test="email != null">
+        email,
       </if>
       <if test="photo != null">
         photo,
@@ -134,8 +134,8 @@
       <if test="password != null">
         #{password,jdbcType=CHAR},
       </if>
-      <if test="mobile != null">
-        #{mobile,jdbcType=VARCHAR},
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
       </if>
       <if test="photo != null">
         #{photo,jdbcType=VARCHAR},
@@ -160,8 +160,8 @@
       <if test="record.password != null">
         `password` = #{record.password,jdbcType=CHAR},
       </if>
-      <if test="record.mobile != null">
-        mobile = #{record.mobile,jdbcType=VARCHAR},
+      <if test="record.email != null">
+        email = #{record.email,jdbcType=VARCHAR},
       </if>
       <if test="record.photo != null">
         photo = #{record.photo,jdbcType=VARCHAR},
@@ -176,7 +176,7 @@
     set id = #{record.id,jdbcType=BIGINT},
       username = #{record.username,jdbcType=VARCHAR},
       `password` = #{record.password,jdbcType=CHAR},
-      mobile = #{record.mobile,jdbcType=VARCHAR},
+      email = #{record.email,jdbcType=VARCHAR},
       photo = #{record.photo,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -191,8 +191,8 @@
       <if test="password != null">
         `password` = #{password,jdbcType=CHAR},
       </if>
-      <if test="mobile != null">
-        mobile = #{mobile,jdbcType=VARCHAR},
+      <if test="email != null">
+        email = #{email,jdbcType=VARCHAR},
       </if>
       <if test="photo != null">
         photo = #{photo,jdbcType=VARCHAR},
@@ -204,7 +204,7 @@
     update user
     set username = #{username,jdbcType=VARCHAR},
       `password` = #{password,jdbcType=CHAR},
-      mobile = #{mobile,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
       photo = #{photo,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>

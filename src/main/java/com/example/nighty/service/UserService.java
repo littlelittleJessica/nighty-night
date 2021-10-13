@@ -68,7 +68,7 @@ public class UserService {
         if (!validResponse.isSuccess()) {
             return validResponse;
         }
-        validResponse = this.checkValid(user.getMobile(), Const.MOBILE);
+        validResponse = this.checkValid(user.getEmail(), Const.EMIAL);
         if (!validResponse.isSuccess()) {
             return validResponse;
         }
@@ -96,10 +96,10 @@ public class UserService {
                     return ServerResponse.createByErrorMessage("用户名已存在");
                 }
             }
-            if (Const.MOBILE.equals(type)) {
+            if (Const.EMIAL.equals(type)) {
                 User userDB = selectByStuNo(str);
                 if (userDB != null) {
-                    return ServerResponse.createByErrorMessage("学号已存在");
+                    return ServerResponse.createByErrorMessage("邮箱已存在");
                 }
             }
         } else {
@@ -126,10 +126,10 @@ public class UserService {
     /**
      * 通过手机号在数据库中查找用户
      */
-    public User selectByStuNo(String mobile) {
+    public User selectByStuNo(String email) {
         UserExample userExample = new UserExample();
         UserExample.Criteria criteria = userExample.createCriteria();
-        criteria.andMobileEqualTo(mobile);
+        criteria.andEmailEqualTo(email);
         List<User> userList = userMapper.selectByExample(userExample);
         if (CollectionUtils.isEmpty(userList)) {
             return null;
@@ -159,13 +159,13 @@ public class UserService {
      * 更新用户信息
      */
     public ServerResponse<UserUpdateResp> updateInformation(UserUpdateReq user) {
-        //需要校验mobile，校验新的mobile是否已存在，并且存在的mobile如果相同的话，不能是当前用户的
+        //需要校验email，校验新的email是否已存在，并且存在的email如果相同的话，不能是当前用户的
         UserExample userExample = new UserExample();
         UserExample.Criteria criteria = userExample.createCriteria();
-        criteria.andMobileEqualTo(user.getMobile());
+        criteria.andEmailEqualTo(user.getEmail());
         List<User> userList = userMapper.selectByExample(userExample);
         if (!CollectionUtils.isEmpty(userList) && userList.get(0).getId() != user.getId()) {
-            return ServerResponse.createByErrorMessage("mobile已存在，请更换mobile再尝试更新");
+            return ServerResponse.createByErrorMessage("email已存在，请更换email再尝试更新");
         }
         UserUpdateResp updateUser = CopyUtil.copy(user, UserUpdateResp.class);
         User userNew = CopyUtil.copy(user, User.class);

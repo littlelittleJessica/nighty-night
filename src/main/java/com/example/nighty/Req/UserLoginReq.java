@@ -2,7 +2,6 @@ package com.example.nighty.Req;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.io.Serializable;
 
 /**
  * @Description

@@ -16,7 +16,7 @@ public class UserUpdateReq {
 
     private String username;
 
-    private String mobile;
+    private String email;
 
     private String photo;
 
@@ -36,12 +36,12 @@ public class UserUpdateReq {
         this.username = username;
     }
 
-    public String getMobile() {
-        return mobile;
+    public String getEmail() {
+        return email;
     }
 
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPhoto() {

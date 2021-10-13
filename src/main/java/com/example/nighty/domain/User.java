@@ -7,7 +7,7 @@ public class User {
 
     private String password;
 
-    private String mobile;
+    private String email;
 
     private String photo;
 
@@ -35,12 +35,12 @@ public class User {
         this.password = password;
     }
 
-    public String getMobile() {
-        return mobile;
+    public String getEmail() {
+        return email;
     }
 
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPhoto() {
@@ -60,7 +60,7 @@ public class User {
         sb.append(", id=").append(id);
         sb.append(", username=").append(username);
         sb.append(", password=").append(password);
-        sb.append(", mobile=").append(mobile);
+        sb.append(", email=").append(email);
         sb.append(", photo=").append(photo);
         sb.append("]");
         return sb.toString();
