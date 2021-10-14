@@ -116,6 +116,13 @@
             <version>2.6</version>
         </dependency>
 
+        <!-- Java Mail坐标依赖 -->
+        <dependency>
+            <groupId>com.sun.mail</groupId>
+            <artifactId>javax.mail</artifactId>
+            <version>1.6.2</version>
+        </dependency>
+
     </dependencies>
 
     <build>

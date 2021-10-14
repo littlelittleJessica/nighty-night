@@ -1,0 +1,9 @@
+GET http://43s1v52580.zicp.vip/test/redis/set/123/test
+Accept: application/json
+
+###
+
+GET http://43s1v52580.zicp.vip/test/redis/get/103760537384521728
+Accept: application/json
+
+###

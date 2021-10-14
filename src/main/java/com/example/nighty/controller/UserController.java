@@ -3,11 +3,14 @@ package com.example.nighty.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.example.nighty.Req.UserLoginReq;
 import com.example.nighty.Req.UserRegisterReq;
+import com.example.nighty.Req.UserResetPasswordReq;
 import com.example.nighty.Req.UserUpdateReq;
 import com.example.nighty.Resp.UserLoginResp;
 import com.example.nighty.Resp.UserUpdateResp;
+import com.example.nighty.common.ResponseCode;
 import com.example.nighty.common.ServerResponse;
 import com.example.nighty.domain.User;
+import com.example.nighty.service.MailService;
 import com.example.nighty.service.UserService;
 import com.example.nighty.util.CopyUtil;
 import com.example.nighty.common.Const;
@@ -15,10 +18,12 @@ import com.example.nighty.util.SnowFlake;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.concurrent.TimeUnit;
 
@@ -43,21 +48,29 @@ public class UserController {
     @Resource
     private RedisTemplate redisTemplate;
 
+    @Resource
+    private JavaMailSender javaMailSender;
+
+    @Resource
+    private MailService mailService;
+
     /**
      * 用户名登录
      */
     @RequestMapping(value = "login", method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse<UserLoginResp> login(UserLoginReq req) {
+    public ServerResponse<UserLoginResp> login(HttpSession session, UserLoginReq req) {
         req.setPassword(DigestUtils.md5DigestAsHex(req.getPassword().getBytes()));
         ServerResponse<UserLoginResp> resp = userService.login(req);
         if (resp.isSuccess()) {
             Long token = snowFlake.nextId();
-            LOG.info("生成单点登录token:{}，并放入redis中",token);
+            LOG.info("生成单点登录token:{}，并放入redis中", token);
             resp.getData().setToken(token.toString());
-            redisTemplate.opsForValue().set(token.toString(), JSONObject.toJSONString(resp),3600*24, TimeUnit.SECONDS);
+            redisTemplate.opsForValue().set(token.toString(), JSONObject.toJSONString(resp), 3600 * 24, TimeUnit.SECONDS);
             //验证token是否已存放到redis中
             LOG.info("key:{},value:{}", token, redisTemplate.opsForValue().get(token.toString()));
+            User user = CopyUtil.copy(resp.getData(), User.class);
+            session.setAttribute(Const.CURRENT_USER, user);
         }
         return resp;
 
@@ -88,26 +101,28 @@ public class UserController {
      */
     @RequestMapping(value = "get_user_info", method = RequestMethod.GET)
     @ResponseBody
-    public ServerResponse<UserLoginResp> getUserInfo(HttpSession session) {
-        User user = (User) session.getAttribute(Const.CURRENT_USER);
-        if (user != null) {
-            UserLoginResp userLoginResp = CopyUtil.copy(user, UserLoginResp.class);
-            return ServerResponse.createBySuccess("获取用户信息成功", userLoginResp);
+    public ServerResponse getUserInfo(HttpServletRequest request) {
+        User currentUser = (User) request.getSession().getAttribute(Const.CURRENT_USER);
+        if (currentUser == null) {
+            LOG.info("token失效或不正确");
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "用户未登录");
         }
-        return ServerResponse.createByErrorMessage("用户未登录，无法获取当前用户信息");
+        return userService.getInformation(currentUser.getId());
     }
 
     /**
      * 登录状态的重置密码
      */
-    @RequestMapping(value = "reset_password", method = RequestMethod.POST)
+    @PostMapping(value = "reset_password")
     @ResponseBody
-    public ServerResponse<String> resetPassword(HttpSession session, String passwordOld, String passwordNew) {
-        User user = (User) session.getAttribute(Const.CURRENT_USER);
-        if (user == null) {
-            return ServerResponse.createByErrorMessage("用户未登录");
+    public ServerResponse resetPassword(UserResetPasswordReq req, HttpServletRequest request) {
+        User currentUser = (User) request.getSession().getAttribute(Const.CURRENT_USER);
+        if (currentUser == null) {
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "用户未登录");
         }
-        return userService.resetPassword(passwordOld, passwordNew, user);
+        Long id = ((User) request.getSession().getAttribute(Const.CURRENT_USER)).getId();
+        req.setPasswordOld(DigestUtils.md5DigestAsHex(req.getPasswordOld().getBytes()));
+        return userService.resetPassword(req, id);
 
     }
 
@@ -116,17 +131,17 @@ public class UserController {
      */
     @RequestMapping(value = "update_information", method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse<UserUpdateResp> update_information(HttpSession session, UserUpdateReq user) {
-        User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
+    public ServerResponse update_information(HttpServletRequest request, UserUpdateReq user) {
+        User currentUser = (User) request.getSession().getAttribute(Const.CURRENT_USER);
         if (currentUser == null) {
-            return ServerResponse.createByErrorMessage("用户未登录");
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "用户未登录");
         }
 
         ServerResponse<UserUpdateResp> response = userService.updateInformation(user);
         if (response.isSuccess()) {
-            session.setAttribute(Const.CURRENT_USER, response.getData());
+            request.getSession().setAttribute(Const.CURRENT_USER, response.getData());
         }
-        return response;
+        return ServerResponse.createBySuccess("更新用户信息成功", response);
     }
 
 }

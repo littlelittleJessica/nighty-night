@@ -41,6 +41,7 @@
                              targetPackage="com.example.nighty.mapper"
                              type="XMLMAPPER"/>
 
-        <table tableName="user" domainObjectName="User"/>
+<!--        <table tableName="user" domainObjectName="User"/>-->
+        <table tableName="verification_code" domainObjectName="VerificationCode"/>
     </context>
 </generatorConfiguration>

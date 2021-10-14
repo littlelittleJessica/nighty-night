@@ -2,6 +2,7 @@ package com.example.nighty.service;
 
 import com.example.nighty.Req.UserLoginReq;
 import com.example.nighty.Req.UserRegisterReq;
+import com.example.nighty.Req.UserResetPasswordReq;
 import com.example.nighty.Req.UserUpdateReq;
 import com.example.nighty.Resp.UserLoginResp;
 import com.example.nighty.Resp.UserUpdateResp;
@@ -49,7 +50,8 @@ public class UserService {
             if (userDB.getPassword().equals(req.getPassword())) {
                 //登录成功
                 LOG.info("登录成功，用户名：{}，密码：{}", req.getUsername(), req.getPassword());
-                UserLoginResp resp = CopyUtil.copy(userDB,UserLoginResp.class);
+
+                UserLoginResp resp = CopyUtil.copy(userDB, UserLoginResp.class);
                 return ServerResponse.createBySuccess("登录成功", resp);
             } else {
                 //密码不正确
@@ -80,8 +82,21 @@ public class UserService {
         if (resultCount == 0) {
             return ServerResponse.createByErrorMessage("注册失败");
         }
-        UserLoginResp userLoginResp = CopyUtil.copy(user, UserLoginResp.class);
+
+        User userDB = selectByUsername(user.getUsername());
+        UserLoginResp userLoginResp = CopyUtil.copy(userDB, UserLoginResp.class);
         return ServerResponse.createBySuccess("注册成功", userLoginResp);
+    }
+
+    /**
+     * 获取当前用户信息
+     */
+    public ServerResponse<User> getInformation(Long userId) {
+        User user = userMapper.selectByPrimaryKey(userId);
+        if (user == null) {
+            ServerResponse.createByErrorMessage("找不到当前用户");
+        }
+        return ServerResponse.createBySuccess("获取用户信息成功", user);
     }
 
     /**
@@ -141,14 +156,14 @@ public class UserService {
     /**
      * 登录状态修改密码
      */
-    public ServerResponse<String> resetPassword(String passwordOld, String passwordNew, User user) {
-        //防止横向越权，要校验一下这个用户的旧密码，一定要指定是这个用户，因为我们回查询出一个count(1)，如果不指定id，那么结果就是true（count>0）
-        String md5Password = DigestUtils.md5DigestAsHex(passwordOld.getBytes());
-        if (!user.getPassword().equals(md5Password)) {
+    public ServerResponse<String> resetPassword(UserResetPasswordReq req, Long id) {
+        User userDB = userMapper.selectByPrimaryKey(id);
+        String passwordDB = userDB.getPassword();
+        if (!req.getPasswordOld().equals(passwordDB)) {
             return ServerResponse.createByErrorMessage("旧密码错误");
         }
-        user.setPassword(DigestUtils.md5DigestAsHex(passwordNew.getBytes()));
-        int updateCount = userMapper.updateByPrimaryKeySelective(user);
+        userDB.setPassword(DigestUtils.md5DigestAsHex(req.getPasswordNew().getBytes()));
+        int updateCount = userMapper.updateByPrimaryKeySelective(userDB);
         if (updateCount > 0) {
             return ServerResponse.createBySuccessMessage("更新密码成功");
         }
@@ -167,8 +182,8 @@ public class UserService {
         if (!CollectionUtils.isEmpty(userList) && userList.get(0).getId() != user.getId()) {
             return ServerResponse.createByErrorMessage("email已存在，请更换email再尝试更新");
         }
-        UserUpdateResp updateUser = CopyUtil.copy(user, UserUpdateResp.class);
         User userNew = CopyUtil.copy(user, User.class);
+        UserUpdateResp updateUser = CopyUtil.copy(user, UserUpdateResp.class);
 
         int updateCount = userMapper.updateByPrimaryKeySelective(userNew);
         if (updateCount > 0) {
