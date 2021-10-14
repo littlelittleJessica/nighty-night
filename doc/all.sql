@@ -12,3 +12,17 @@ create table `user` (
 ) engine=innodb default charset=utf8mb4 comment='用户';
 
 insert into `user` (id, `username`, `password`,`email`,`photo`) values (1, 'test', 'C18F80EFEE1FA267583B5DF3D7E948C3','446067382@qq.com','');
+
+# 短信验证码
+drop table if exists `verification_code`;
+create table `verification_code` (
+                       `id` char(8) not null default '' comment 'id',
+                       `email` varchar(50) not null comment '邮箱',
+                       `code` char(6) not null comment '验证码',
+                       `at` datetime(3) not null comment '生成时间',
+                       `status` char(1) not null comment '用途|枚举[SmsStatusEnum]：USED("U", "已使用"), NOT_USED("N", "未使用")',
+                       primary key (`id`)
+) engine=innodb default charset=utf8mb4 comment='短信验证码';
+
+insert into `verification_code` (id, email, code, at, status) values ('00000000', '446067382@qq.com', '123456', now(), 'N');
+

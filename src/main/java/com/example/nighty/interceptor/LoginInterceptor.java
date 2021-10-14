@@ -40,7 +40,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         }
 
         String path = request.getRequestURL().toString();
-        LOG.info("接口登录拦截：，path：{}", path);
+        LOG.info("接口登录拦截：path：{}", path);
 
         //获取header的token参数
         String token = request.getHeader("token");
