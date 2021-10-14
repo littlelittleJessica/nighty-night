@@ -20,6 +20,9 @@ public class UserRegisterReq {
     @NotNull(message = "Password can not be empty!")
     private String password;
 
+    @NotNull(message = "Verification code can not be empty!")
+    private String code;
+
     public String getUsername() {
         return username;
     }
@@ -42,5 +45,13 @@ public class UserRegisterReq {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 }

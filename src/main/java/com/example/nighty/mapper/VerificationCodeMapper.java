@@ -10,7 +10,7 @@ public interface VerificationCodeMapper {
 
     int deleteByExample(VerificationCodeExample example);
 
-    int deleteByPrimaryKey(String id);
+    int deleteByPrimaryKey(Long id);
 
     int insert(VerificationCode record);
 
@@ -18,7 +18,7 @@ public interface VerificationCodeMapper {
 
     List<VerificationCode> selectByExample(VerificationCodeExample example);
 
-    VerificationCode selectByPrimaryKey(String id);
+    VerificationCode selectByPrimaryKey(Long id);
 
     int updateByExampleSelective(@Param("record") VerificationCode record, @Param("example") VerificationCodeExample example);
 

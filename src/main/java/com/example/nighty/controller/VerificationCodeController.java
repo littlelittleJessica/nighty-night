@@ -1,6 +1,5 @@
 package com.example.nighty.controller;
 
-import com.example.nighty.Req.CodeReq;
 import com.example.nighty.common.ServerResponse;
 import com.example.nighty.service.VerificationCodeService;
 import org.slf4j.Logger;
@@ -26,10 +25,10 @@ public class VerificationCodeController {
 
     @RequestMapping(value = "send", method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse send(CodeReq codeReq) {
-        LOG.info("发送短信请求开始：{}", codeReq);
-        verificationCodeService.sendCode(codeReq);
-        LOG.info("发送短信请求结束");
-        return ServerResponse.createBySuccess("验证码已发送");
+    public ServerResponse send(String email) {
+        LOG.info("发送邮件请求开始：{}", email);
+        ServerResponse response = verificationCodeService.sendCode(email);
+        LOG.info("发送邮件请求结束");
+        return response;
     }
 }

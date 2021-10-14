@@ -3,7 +3,7 @@ package com.example.nighty.domain;
 import java.util.Date;
 
 public class VerificationCode {
-    private String id;
+    private Long id;
 
     private String email;
 
@@ -13,11 +13,11 @@ public class VerificationCode {
 
     private String status;
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

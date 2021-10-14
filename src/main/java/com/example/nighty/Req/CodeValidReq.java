@@ -7,11 +7,20 @@ package com.example.nighty.Req;
  * @Version v
  * @Date 2021/10/13
  */
-public class CodeReq {
+public class CodeValidReq {
+    //code
+    private String code;
 
     //邮箱
     private String email;
 
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
 
     public String getEmail() {
         return email;

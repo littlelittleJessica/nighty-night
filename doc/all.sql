@@ -16,7 +16,7 @@ insert into `user` (id, `username`, `password`,`email`,`photo`) values (1, 'test
 # 短信验证码
 drop table if exists `verification_code`;
 create table `verification_code` (
-                       `id` char(8) not null default '' comment 'id',
+                       `id` bigint auto_increment not null comment 'id',
                        `email` varchar(50) not null comment '邮箱',
                        `code` char(6) not null comment '验证码',
                        `at` datetime(3) not null comment '生成时间',
@@ -24,5 +24,5 @@ create table `verification_code` (
                        primary key (`id`)
 ) engine=innodb default charset=utf8mb4 comment='短信验证码';
 
-insert into `verification_code` (id, email, code, at, status) values ('00000000', '446067382@qq.com', '123456', now(), 'N');
+insert into `verification_code` (id, email, code, at, status) values (1, '446067382@qq.com', '123456', now(), 'N');
 

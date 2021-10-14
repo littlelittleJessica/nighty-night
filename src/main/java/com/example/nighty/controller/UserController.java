@@ -1,24 +1,20 @@
 package com.example.nighty.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.example.nighty.Req.UserLoginReq;
-import com.example.nighty.Req.UserRegisterReq;
-import com.example.nighty.Req.UserResetPasswordReq;
-import com.example.nighty.Req.UserUpdateReq;
+import com.example.nighty.Req.*;
 import com.example.nighty.Resp.UserLoginResp;
 import com.example.nighty.Resp.UserUpdateResp;
 import com.example.nighty.common.ResponseCode;
 import com.example.nighty.common.ServerResponse;
 import com.example.nighty.domain.User;
-import com.example.nighty.service.MailService;
 import com.example.nighty.service.UserService;
+import com.example.nighty.service.VerificationCodeService;
 import com.example.nighty.util.CopyUtil;
 import com.example.nighty.common.Const;
 import com.example.nighty.util.SnowFlake;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -49,10 +45,7 @@ public class UserController {
     private RedisTemplate redisTemplate;
 
     @Resource
-    private JavaMailSender javaMailSender;
-
-    @Resource
-    private MailService mailService;
+    private VerificationCodeService verificationCodeService;
 
     /**
      * 用户名登录
@@ -93,7 +86,21 @@ public class UserController {
     @RequestMapping(value = "register", method = RequestMethod.POST)
     @ResponseBody
     public ServerResponse<UserLoginResp> register(UserRegisterReq user) {
-        return userService.register(user);
+
+        //校验邮件验证码
+        CodeValidReq code = new CodeValidReq();
+        code.setCode(user.getCode());
+        code.setEmail(user.getEmail());
+        ServerResponse response = verificationCodeService.validCode(code);
+        if(response.isSuccess()){
+            return userService.register(user);
+        }
+        else {
+            return response;
+        }
+
+        
+
     }
 
     /**

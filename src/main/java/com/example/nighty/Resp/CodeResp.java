@@ -11,9 +11,6 @@ import java.util.Date;
  * @Date 2021/10/13
  */
 public class CodeResp {
-    //id
-    private String id;
-
     //邮箱
     private String email;
 
@@ -26,14 +23,6 @@ public class CodeResp {
 
     //用途|枚举[SmsStatusEnum]：USED("U", "已使用"), NOT_USED("N", "未使用")
     private String status;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getEmail() {
         return email;
