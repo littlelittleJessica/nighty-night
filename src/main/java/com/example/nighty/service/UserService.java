@@ -182,6 +182,15 @@ public class UserService {
         if (!CollectionUtils.isEmpty(userList) && userList.get(0).getId() != user.getId()) {
             return ServerResponse.createByErrorMessage("email已存在，请更换email再尝试更新");
         }
+
+        UserExample userExample2 = new UserExample();
+        UserExample.Criteria criteria2 = userExample2.createCriteria();
+        criteria2.andUsernameEqualTo(user.getUsername());
+        List<User> userList2 = userMapper.selectByExample(userExample2);
+        if (!CollectionUtils.isEmpty(userList2) && userList2.get(0).getId() != user.getId()) {
+            return ServerResponse.createByErrorMessage("username已存在，请更换username再尝试更新");
+        }
+
         User userNew = CopyUtil.copy(user, User.class);
         UserUpdateResp updateUser = CopyUtil.copy(user, UserUpdateResp.class);
 

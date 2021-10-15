@@ -15,6 +15,7 @@ import com.example.nighty.util.SnowFlake;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.HttpStatus;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -74,10 +75,19 @@ public class UserController {
      */
     @RequestMapping(value = "logout", method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse<String> logout(String token) {
-        redisTemplate.delete(token);
-        LOG.info("退出登录成功");
-        return ServerResponse.createBySuccessMessage("退出登录成功");
+    public ServerResponse<String> logout(HttpServletRequest request) {
+        String token = request.getHeader("token");
+        if (token == null || token.isEmpty()) {
+            return ServerResponse.createByErrorMessage("token为空，无法退出登录");
+        }
+        Object object = redisTemplate.opsForValue().get(token);
+        if (object == null) {
+            return ServerResponse.createByErrorMessage("token无效，无法退出登录");
+        } else {
+            redisTemplate.delete(token);
+            LOG.info("退出登录成功");
+            return ServerResponse.createBySuccessMessage("退出登录成功");
+        }
     }
 
     /**
@@ -92,14 +102,12 @@ public class UserController {
         code.setCode(user.getCode());
         code.setEmail(user.getEmail());
         ServerResponse response = verificationCodeService.validCode(code);
-        if(response.isSuccess()){
+        if (response.isSuccess()) {
             return userService.register(user);
-        }
-        else {
+        } else {
             return response;
         }
 
-        
 
     }
 
@@ -148,7 +156,7 @@ public class UserController {
         if (response.isSuccess()) {
             request.getSession().setAttribute(Const.CURRENT_USER, response.getData());
         }
-        return ServerResponse.createBySuccess("更新用户信息成功", response);
+        return response;
     }
 
 }
