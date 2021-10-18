@@ -26,3 +26,23 @@ create table `verification_code` (
 
 insert into `verification_code` (id, email, code, at, status) values (1, '446067382@qq.com', '123456', now(), 'N');
 
+# 助眠之声
+drop table if exists `voice`;
+create table `voice` (
+    `id` bigint auto_increment not null comment 'id',
+    `name` varchar(50) not null comment '名称',
+    `cover` varchar(200) comment '封面url',
+    `description` varchar(2000) comment '概述',
+    `time` int default 0 comment '时长|单位秒',
+    `category` char(1) comment '类别|枚举[VoiceCategory]：MUSIC("M", "轻音乐"),STORY("S", "睡眠故事"),WHITE_NOISE("W", "白噪音")',
+    primary key (`id`)
+)engine=innodb default charset=utf8mb4 comment='助眠之声';
+
+-- 音乐内容文件
+drop table if exists `voice_file`;
+create table `voice_file` (
+                                       `id` char(8) not null default '' comment 'id',
+                                       `voice_id` char(8) not null comment '音乐id',
+                                       `url` varchar(100) comment '地址',
+                                       primary key (`id`)
+) engine=innodb default charset=utf8mb4 comment='音乐内容文件';
