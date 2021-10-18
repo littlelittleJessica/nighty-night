@@ -45,5 +45,6 @@
 <!--        <table tableName="verification_code" domainObjectName="VerificationCode"/>-->
         <table tableName="voice" domainObjectName="Voice"/>
         <table tableName="voice_file" domainObjectName="VoiceFile"/>
+        <table tableName="user_voice" domainObjectName="UserVoice"/>
     </context>
 </generatorConfiguration>

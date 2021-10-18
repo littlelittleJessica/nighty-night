@@ -10,7 +10,7 @@ public interface VoiceFileMapper {
 
     int deleteByExample(VoiceFileExample example);
 
-    int deleteByPrimaryKey(String id);
+    int deleteByPrimaryKey(Long id);
 
     int insert(VoiceFile record);
 
@@ -18,7 +18,7 @@ public interface VoiceFileMapper {
 
     List<VoiceFile> selectByExample(VoiceFileExample example);
 
-    VoiceFile selectByPrimaryKey(String id);
+    VoiceFile selectByPrimaryKey(Long id);
 
     int updateByExampleSelective(@Param("record") VoiceFile record, @Param("example") VoiceFileExample example);
 

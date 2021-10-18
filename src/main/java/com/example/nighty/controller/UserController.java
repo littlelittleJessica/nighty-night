@@ -15,7 +15,6 @@ import com.example.nighty.util.SnowFlake;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.http.HttpStatus;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.example.nighty.mapper.VoiceFileMapper">
-  <resultMap id="BaseResultMap" type="com.example.nighty.domain.VoiceFile">
+<mapper namespace="com.example.nighty.mapper.UserVoiceMapper">
+  <resultMap id="BaseResultMap" type="com.example.nighty.domain.UserVoice">
     <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
     <result column="voice_id" jdbcType="BIGINT" property="voiceId" />
-    <result column="url" jdbcType="VARCHAR" property="url" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -65,15 +65,15 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, voice_id, url
+    id, user_id, voice_id
   </sql>
-  <select id="selectByExample" parameterType="com.example.nighty.domain.VoiceFileExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.example.nighty.domain.UserVoiceExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from voice_file
+    from user_voice
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -84,67 +84,67 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from voice_file
+    from user_voice
     where id = #{id,jdbcType=BIGINT}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from voice_file
+    delete from user_voice
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <delete id="deleteByExample" parameterType="com.example.nighty.domain.VoiceFileExample">
-    delete from voice_file
+  <delete id="deleteByExample" parameterType="com.example.nighty.domain.UserVoiceExample">
+    delete from user_voice
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.example.nighty.domain.VoiceFile">
-    insert into voice_file (id, voice_id, url
+  <insert id="insert" parameterType="com.example.nighty.domain.UserVoice">
+    insert into user_voice (id, user_id, voice_id
       )
-    values (#{id,jdbcType=BIGINT}, #{voiceId,jdbcType=BIGINT}, #{url,jdbcType=VARCHAR}
+    values (#{id,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{voiceId,jdbcType=BIGINT}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.example.nighty.domain.VoiceFile">
-    insert into voice_file
+  <insert id="insertSelective" parameterType="com.example.nighty.domain.UserVoice">
+    insert into user_voice
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
       </if>
+      <if test="userId != null">
+        user_id,
+      </if>
       <if test="voiceId != null">
         voice_id,
-      </if>
-      <if test="url != null">
-        url,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
         #{id,jdbcType=BIGINT},
       </if>
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
       <if test="voiceId != null">
         #{voiceId,jdbcType=BIGINT},
       </if>
-      <if test="url != null">
-        #{url,jdbcType=VARCHAR},
-      </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.example.nighty.domain.VoiceFileExample" resultType="java.lang.Long">
-    select count(*) from voice_file
+  <select id="countByExample" parameterType="com.example.nighty.domain.UserVoiceExample" resultType="java.lang.Long">
+    select count(*) from user_voice
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update voice_file
+    update user_voice
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=BIGINT},
       </if>
+      <if test="record.userId != null">
+        user_id = #{record.userId,jdbcType=BIGINT},
+      </if>
       <if test="record.voiceId != null">
         voice_id = #{record.voiceId,jdbcType=BIGINT},
-      </if>
-      <if test="record.url != null">
-        url = #{record.url,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -152,30 +152,30 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update voice_file
+    update user_voice
     set id = #{record.id,jdbcType=BIGINT},
-      voice_id = #{record.voiceId,jdbcType=BIGINT},
-      url = #{record.url,jdbcType=VARCHAR}
+      user_id = #{record.userId,jdbcType=BIGINT},
+      voice_id = #{record.voiceId,jdbcType=BIGINT}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.example.nighty.domain.VoiceFile">
-    update voice_file
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.nighty.domain.UserVoice">
+    update user_voice
     <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
       <if test="voiceId != null">
         voice_id = #{voiceId,jdbcType=BIGINT},
-      </if>
-      <if test="url != null">
-        url = #{url,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.example.nighty.domain.VoiceFile">
-    update voice_file
-    set voice_id = #{voiceId,jdbcType=BIGINT},
-      url = #{url,jdbcType=VARCHAR}
+  <update id="updateByPrimaryKey" parameterType="com.example.nighty.domain.UserVoice">
+    update user_voice
+    set user_id = #{userId,jdbcType=BIGINT},
+      voice_id = #{voiceId,jdbcType=BIGINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

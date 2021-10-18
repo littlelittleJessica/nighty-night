@@ -1,11 +1,11 @@
 package com.example.nighty.domain;
 
-public class VoiceFile {
+public class UserVoice {
     private Long id;
 
-    private Long voiceId;
+    private Long userId;
 
-    private String url;
+    private Long voiceId;
 
     public Long getId() {
         return id;
@@ -13,6 +13,14 @@ public class VoiceFile {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public Long getVoiceId() {
@@ -23,14 +31,6 @@ public class VoiceFile {
         this.voiceId = voiceId;
     }
 
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -38,8 +38,8 @@ public class VoiceFile {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
+        sb.append(", userId=").append(userId);
         sb.append(", voiceId=").append(voiceId);
-        sb.append(", url=").append(url);
         sb.append("]");
         return sb.toString();
     }

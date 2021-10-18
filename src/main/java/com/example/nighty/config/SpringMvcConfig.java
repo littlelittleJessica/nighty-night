@@ -20,7 +20,8 @@ public class SpringMvcConfig implements WebMvcConfigurer {
                         "/user/login",
                         "/user/register",
                         "/test/**",
-                        "/code/**"
+                        "/code/**",
+                        "/voice/list/**"
                 );
     }
 }
