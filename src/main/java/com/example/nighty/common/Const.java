@@ -9,7 +9,6 @@ package com.example.nighty.common;
 public class Const {
 
     public static final String CURRENT_USER = "currentUser";
-
     public static final String EMIAL = "email";
     public static final String USERNAME = "username";
 

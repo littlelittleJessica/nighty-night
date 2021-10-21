@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * @Description 拦截器：Spring框架特有的，常用于登录校验，权限校验，请求日志打印
+ * @Description
  * @Author Jessica
  * @Version v
  * @Date 2021/9/3
@@ -28,35 +28,33 @@ public class LoginInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        // 打印请求信息
-        LOG.info("------------- LoginInterceptor 开始 -------------");
+
+        LOG.info("------------- LoginInterceptor begin -------------");
         long startTime = System.currentTimeMillis();
         request.setAttribute("requestStartTime", startTime);
 
-        // OPTIONS请求不做校验,
-        // 前后端分离的架构, 前端会发一个OPTIONS请求先做预检, 对预检请求不做校验
         if (request.getMethod().toUpperCase().equals("OPTIONS")) {
             return true;
         }
 
         String path = request.getRequestURL().toString();
-        LOG.info("接口登录拦截：path：{}", path);
+        LOG.info("Intercept----path：{}", path);
 
-        //获取header的token参数
+        //get the token from header
         String token = request.getHeader("token");
-        LOG.info("登录校验开始，token：{}", token);
+        LOG.info("Starting check login information: token：{}", token);
         if (token == null || token.isEmpty()) {
-            LOG.info("token为空，请求被拦截");
+            LOG.info("Empty token, the request has been intercepted");
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
             return false;
         }
         Object object = redisTemplate.opsForValue().get(token);
         if (object == null) {
-            LOG.warn("token无效，请求被拦截");
+            LOG.warn("Invalid token, the request has been intercepted");
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
             return false;
         } else {
-            LOG.info("已登录：{}", object);
+            LOG.info("Logged in: {}", object);
             return true;
         }
     }
@@ -64,12 +62,11 @@ public class LoginInterceptor implements HandlerInterceptor {
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
         long startTime = (Long) request.getAttribute("requestStartTime");
-        LOG.info("------------- LoginInterceptor 结束 耗时：{} ms -------------", System.currentTimeMillis() - startTime);
+        LOG.info("------------- LoginInterceptor end---Time consuming：{} ms -------------", System.currentTimeMillis() - startTime);
     }
 
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
-//        LOG.info("LogInterceptor 结束");
     }
 }
 

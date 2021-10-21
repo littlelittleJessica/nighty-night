@@ -8,10 +8,9 @@ package com.example.nighty.Req;
  * @Date 2021/10/13
  */
 public class CodeValidReq {
-    //code
+
     private String code;
 
-    //邮箱
     private String email;
 
     public String getCode() {

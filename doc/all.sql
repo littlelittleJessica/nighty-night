@@ -1,30 +1,30 @@
--- 用户表
+-- user
 drop table if exists `user`;
 create table `user`
 (
     `id`       bigint auto_increment not null comment 'ID',
-    `username` varchar(50)           not null comment '用户名',
-    `password` char(32)              not null comment '密码',
-    `email`    varchar(30)           not null comment '邮箱',
-    `photo`    varchar(200) comment '头像url',
+    `username` varchar(50)           not null comment 'username',
+    `password` char(32)              not null comment 'password',
+    `email`    varchar(30)           not null comment 'email',
+    `photo`    varchar(200) comment 'photo url',
     primary key (`id`),
     unique key `login_name_unique` (`username`),
     unique key `student_no_unique` (`email`)
 ) engine = innodb
-  default charset = utf8mb4 comment ='用户';
+  default charset = utf8mb4 comment ='user';
 
 insert into `user` (id, `username`, `password`, `email`, `photo`)
 values (1, 'test', 'C18F80EFEE1FA267583B5DF3D7E948C3', '446067382@qq.com', '');
 
-# 短信验证码
+# email verification code
 drop table if exists `verification_code`;
 create table `verification_code`
 (
     `id`     bigint auto_increment not null comment 'id',
-    `email`  varchar(50)           not null comment '邮箱',
-    `code`   char(6)               not null comment '验证码',
-    `at`     datetime(3)           not null comment '生成时间',
-    `status` char(1)               not null comment '用途|枚举[SmsStatusEnum]：USED("U", "已使用"), NOT_USED("N", "未使用")',
+    `email`  varchar(50)           not null comment 'email',
+    `code`   char(6)               not null comment 'verification code',
+    `at`     datetime(3)           not null comment 'created/sent time',
+    `status` char(1)               not null comment 'status|enum[SmsStatusEnum]：USED("U", "used"), NOT_USED("N", "unused")',
     primary key (`id`)
 ) engine = innodb
   default charset = utf8mb4 comment ='短信验证码';
@@ -32,39 +32,55 @@ create table `verification_code`
 insert into `verification_code` (id, email, code, at, status)
 values (1, '446067382@qq.com', '123456', now(), 'N');
 
-# 助眠之声
+# Voice of Sleep
 drop table if exists `voice`;
 create table `voice`
 (
     `id`          bigint auto_increment not null comment 'id',
-    `name`        varchar(50)           not null comment '名称',
-    `cover`       varchar(200) comment '封面url',
-    `description` varchar(2000) comment '概述',
-    `time`        int default 0 comment '时长|单位秒',
-    `category`    char(1) comment '类别|枚举[VoiceCategory]：MUSIC("M", "轻音乐"),STORY("S", "睡眠故事"),WHITE_NOISE("W", "白噪音")',
+    `name`        varchar(50)           not null comment 'name',
+    `cover`       varchar(200) comment 'cover url',
+    `description` varchar(2000) comment 'description',
+    `time`        int default 0 comment 'time|second',
+    `category`    char(1) comment 'category|enum[VoiceCategory]：MUSIC("M", "Light Music"),STORY("S", "Sleep Story"),WHITE_NOISE("W", "White Noise")',
     primary key (`id`)
 ) engine = innodb
-  default charset = utf8mb4 comment ='助眠之声';
+  default charset = utf8mb4 comment ='Voice of Sleep';
 
--- 音乐内容文件
+-- voice file
 drop table if exists `voice_file`;
 create table `voice_file`
 (
     `id`       bigint auto_increment not null comment 'id',
-    `voice_id` bigint                not null comment '音乐id',
-    `url`      varchar(100) comment '地址',
+    `voice_id` bigint                not null,
+    `url`      varchar(100) comment 'url of the voice content',
     primary key (`id`)
 ) engine = innodb
-  default charset = utf8mb4 comment ='音乐内容文件';
+  default charset = utf8mb4 comment ='the content file of the music';
 
-# 用户收藏音乐
+# the favorite voice of the users
 drop table if exists `user_voice`;
 create table `user_voice`
 (
     `id`       bigint auto_increment not null comment 'id',
-    `user_id`  bigint not null comment '用户id',
-    `voice_id` bigint not null comment '音乐id',
+    `user_id`  bigint                not null not null comment 'user_id',
+    `voice_id` bigint                not null not null comment 'voice_id',
     primary key (`id`),
     unique key `user_voice_unique` (`user_id`, `voice_id`)
 ) engine = innodb
-  default charset = utf8mb4 comment ='用户收藏音乐';
+  default charset = utf8mb4 comment ='the favorite voice of the users';
+
+# role
+drop table if exists `role`;
+create table `role`
+(
+    `id`   bigint auto_increment not null comment 'id',
+    `name` varchar(50)           not null comment 'role',
+    `desc` varchar(100)          not null comment 'description',
+    primary key (`id`)
+) engine = innodb
+  default charset = utf8mb4 comment ='role';
+
+insert into `role`
+values ('1', 'admin', 'administrator who can update resources');
+insert into `role`
+values ('2', 'user', 'common user');

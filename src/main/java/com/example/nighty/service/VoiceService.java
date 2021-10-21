@@ -25,7 +25,7 @@ public class VoiceService {
     private VoiceMapper voiceMapper;
 
     /**
-     * 根据种类查询voice
+     * query voice by category
      */
     public List<Voice> listByCategory(PageReq pageReq, String catogory) {
         PageHelper.startPage(pageReq.getPage(), pageReq.getSize());

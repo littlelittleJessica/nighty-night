@@ -48,7 +48,7 @@ public class UserController {
     private VerificationCodeService verificationCodeService;
 
     /**
-     * 用户名登录
+     * Login
      */
     @RequestMapping(value = "login", method = RequestMethod.POST)
     @ResponseBody
@@ -57,10 +57,10 @@ public class UserController {
         ServerResponse<UserLoginResp> resp = userService.login(req);
         if (resp.isSuccess()) {
             Long token = snowFlake.nextId();
-            LOG.info("生成单点登录token:{}，并放入redis中", token);
+            LOG.info("Generate a token:{}, and put it in redis", token);
             resp.getData().setToken(token.toString());
             redisTemplate.opsForValue().set(token.toString(), JSONObject.toJSONString(resp), 3600 * 24, TimeUnit.SECONDS);
-            //验证token是否已存放到redis中
+            //verify if the token has been put in redis
             LOG.info("key:{},value:{}", token, redisTemplate.opsForValue().get(token.toString()));
             User user = CopyUtil.copy(resp.getData(), User.class);
             session.setAttribute(Const.CURRENT_USER, user);
@@ -70,33 +70,33 @@ public class UserController {
     }
 
     /**
-     * 退出登录
+     * Logout
      */
     @RequestMapping(value = "logout", method = RequestMethod.POST)
     @ResponseBody
     public ServerResponse<String> logout(HttpServletRequest request) {
         String token = request.getHeader("token");
         if (token == null || token.isEmpty()) {
-            return ServerResponse.createByErrorMessage("token为空，无法退出登录");
+            return ServerResponse.createByErrorMessage("Logout failed because of empty token");
         }
         Object object = redisTemplate.opsForValue().get(token);
         if (object == null) {
-            return ServerResponse.createByErrorMessage("token无效，无法退出登录");
+            return ServerResponse.createByErrorMessage("Logout failed because of invalid token");
         } else {
             redisTemplate.delete(token);
-            LOG.info("退出登录成功");
-            return ServerResponse.createBySuccessMessage("退出登录成功");
+            LOG.info("Logout success!");
+            return ServerResponse.createBySuccessMessage("Logout success");
         }
     }
 
     /**
-     * 用户注册
+     * Register
      */
     @RequestMapping(value = "register", method = RequestMethod.POST)
     @ResponseBody
     public ServerResponse<UserLoginResp> register(UserRegisterReq user) {
 
-        //校验邮件验证码
+        //verify email verification code
         CodeValidReq code = new CodeValidReq();
         code.setCode(user.getCode());
         code.setEmail(user.getEmail());
@@ -111,28 +111,28 @@ public class UserController {
     }
 
     /**
-     * 获取当前用户信息
+     * get the information of current user
      */
     @RequestMapping(value = "get_user_info", method = RequestMethod.GET)
     @ResponseBody
     public ServerResponse getUserInfo(HttpServletRequest request) {
         User currentUser = (User) request.getSession().getAttribute(Const.CURRENT_USER);
         if (currentUser == null) {
-            LOG.info("token失效或不正确");
-            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "用户未登录");
+            LOG.info("token is invalid or incorrect");
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "The user has not logged in");
         }
         return userService.getInformation(currentUser.getId());
     }
 
     /**
-     * 登录状态的重置密码
+     * Reset Password
      */
     @PostMapping(value = "reset_password")
     @ResponseBody
     public ServerResponse resetPassword(UserResetPasswordReq req, HttpServletRequest request) {
         User currentUser = (User) request.getSession().getAttribute(Const.CURRENT_USER);
         if (currentUser == null) {
-            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "用户未登录");
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "The user has not logged in");
         }
         Long id = ((User) request.getSession().getAttribute(Const.CURRENT_USER)).getId();
         req.setPasswordOld(DigestUtils.md5DigestAsHex(req.getPasswordOld().getBytes()));
@@ -141,14 +141,14 @@ public class UserController {
     }
 
     /**
-     * 更新用户信息
+     * Update user information
      */
     @RequestMapping(value = "update_information", method = RequestMethod.POST)
     @ResponseBody
     public ServerResponse update_information(HttpServletRequest request, UserUpdateReq user) {
         User currentUser = (User) request.getSession().getAttribute(Const.CURRENT_USER);
         if (currentUser == null) {
-            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "用户未登录");
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "The user has not logged in");
         }
 
         ServerResponse<UserUpdateResp> response = userService.updateInformation(user);

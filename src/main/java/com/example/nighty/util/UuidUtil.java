@@ -2,8 +2,7 @@ package com.example.nighty.util;
 
 import java.util.UUID;
 
-/** UUID工具类 用来生成ID
- * uuid是根据机器、时间等多个维度生成的32位的16进制数
+/**
  * @Description
  * @Author Jessica
  * @Version v
@@ -20,7 +19,7 @@ public class UuidUtil {
 
 
     /**
-     * 获取短UUID
+     * derive short UUID
      * @return
      */
     public static String getShortUuid() {
@@ -36,11 +35,10 @@ public class UuidUtil {
     }
 
     /**
-     * 获得32位UUID
+     * derive 32 bit UUID
      */
     public static String getUuid(){
         String uuid = UUID.randomUUID().toString();
-        //去掉“-”符号
         return uuid.replaceAll("-", "");
     }
 

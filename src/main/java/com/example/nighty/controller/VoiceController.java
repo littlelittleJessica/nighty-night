@@ -29,12 +29,12 @@ public class VoiceController {
     private VoiceService voiceService;
 
     /**
-     * 根据传入的分类查询音乐
+     * List all voice by category
      */
     @GetMapping("list")
     public ServerResponse listByCategory(PageReq pageReq, String category) {
         List<Voice> voiceList = voiceService.listByCategory(pageReq, category);
-        return ServerResponse.createBySuccess("查询音乐成功", voiceList);
+        return ServerResponse.createBySuccess("Query voice list success", voiceList);
     }
 
 

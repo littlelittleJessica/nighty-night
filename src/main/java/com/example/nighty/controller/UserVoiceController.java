@@ -29,20 +29,20 @@ public class UserVoiceController {
     private UserVoiceService userVoiceService;
 
     /**
-     * 查询用户收藏列表
+     * List the favorite voice of the user by category
      */
     @PostMapping("list_favorite")
     @ResponseBody
     public ServerResponse listFavorite(HttpServletRequest request, PageReq pageReq, String category) {
         User user = (User) request.getSession().getAttribute(Const.CURRENT_USER);
         if(user==null){
-            return ServerResponse.createByErrorMessage("用户未登录");
+            return ServerResponse.createByErrorMessage("The user has not logged in");
         }
-        return ServerResponse.createBySuccess("查询用户收藏列表成功", userVoiceService.listFavorite(user, pageReq, category));
+        return ServerResponse.createBySuccess("Query user favorite list success", userVoiceService.listFavorite(user, pageReq, category));
     }
 
     /**
-     * 用户收藏音乐
+     * Favorite voice
      */
     @RequestMapping(value = "favorite", method = RequestMethod.POST)
     @ResponseBody
@@ -51,7 +51,7 @@ public class UserVoiceController {
     }
 
     /**
-     * 用户取消收藏音乐
+     * Unfavorite voice
      */
     @RequestMapping(value = "unfavorite", method = RequestMethod.DELETE)
     @ResponseBody

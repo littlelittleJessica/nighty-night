@@ -9,9 +9,7 @@ package com.example.nighty.Req;
  */
 public class CodeReq {
 
-    //邮箱
     private String email;
-
 
     public String getEmail() {
         return email;

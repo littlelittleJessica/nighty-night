@@ -35,13 +35,12 @@ public class VerificationCodeService {
 
 
     /**
-     * 发送邮件验证码
-     * 同邮箱同操作1分钟内不能重复发送邮件
+     * send email verification code
+     * The same email address can not sent two emails in one minute
      */
     public ServerResponse sendCode(String email) {
         VerificationCodeExample example = new VerificationCodeExample();
         VerificationCodeExample.Criteria criteria = example.createCriteria();
-        //查找1分钟内有没有同邮箱同操作发送记录且没有被用过
         criteria.andEmailEqualTo(email)
                 .andStatusEqualTo(CodeStatusEnum.NOT_USED.getCode())
                 .andAtGreaterThan(new Date(new Date().getTime() - 60 * 1000));
@@ -51,16 +50,15 @@ public class VerificationCodeService {
             saveAndSend(email);
             return ServerResponse.createBySuccess("Email Sent!");
         } else {
-            LOG.info("邮件请求过于频繁：{}", email);
+            LOG.info("Email sent too frequent: {}", email);
             return ServerResponse.createByErrorMessage("Email sent too frequently!");
         }
     }
 
     /**
-     * 保存并发送验证码
+     * save and send verification code
      */
     private void saveAndSend(String email) {
-        //生成6位数字
         String code = String.valueOf((int) (((Math.random() * 9) + 1) * 100000));
         CodeResp codeResp = new CodeResp();
         codeResp.setCode(code);
@@ -80,12 +78,11 @@ public class VerificationCodeService {
     }
 
     /**
-     * 校验邮件验证码，且操作类型要一致
+     * verify code
      */
     public ServerResponse validCode(CodeValidReq codeValidReq) {
         VerificationCodeExample example = new VerificationCodeExample();
         VerificationCodeExample.Criteria criteria = example.createCriteria();
-        //查找1分钟内同邮箱同操作发送记录
         criteria.andEmailEqualTo(codeValidReq.getEmail()).
                 andAtGreaterThan(new Date(new Date().getTime() - 60 * 1000));
         List<VerificationCode> verificationCodeList = verificationCodeMapper.selectByExample(example);
@@ -94,14 +91,15 @@ public class VerificationCodeService {
             VerificationCode verificationCodeDb = verificationCodeList.get(0);
             String codeDB = verificationCodeDb.getCode();
             if (!codeDB.equals(codeValidReq.getCode())) {
-                LOG.warn("邮件验证码不正确，数据库验证码：{}，输入验证码：{}", codeDB, codeValidReq.getCode());
+                LOG.warn("Incorrect verification code, code in database{}, wrong code: {}", codeDB, codeValidReq.getCode());
                 return ServerResponse.createByErrorMessage("Wrong Verification Code!");
             } else {
                 verificationCodeDb.setStatus(CodeStatusEnum.USED.getCode());
                 verificationCodeMapper.updateByPrimaryKey(verificationCodeDb);
             }
         } else {
-            LOG.warn("邮件验证码不存在或已过期，请重新发送邮件");
+            LOG.warn("The verification code doesn't exist or has expired! \" +\n" +
+                    "                    \"Please resend one!");
             return ServerResponse.createByErrorMessage("The verification code doesn't exist or has expired! " +
                     "Please resend one!");
         }

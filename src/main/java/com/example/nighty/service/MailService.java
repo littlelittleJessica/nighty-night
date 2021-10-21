@@ -30,10 +30,8 @@ public class MailService implements com.example.nighty.util.MailService {
                     "Verification", content);
             javaMailSender.send(message);
         } catch (Exception e) {
-            //跳转至邮件发送失败页面
             return "CheckError";
         }
-        //跳转至邮件发送成功页面
         return "CheckSuccess";
     }
 }

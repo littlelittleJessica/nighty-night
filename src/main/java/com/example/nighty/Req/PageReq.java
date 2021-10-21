@@ -10,19 +10,12 @@ import java.util.List;
  */
 public class PageReq<T> {
 
-    /**
-     * 当前页码
-     */
+    //current page
     protected int page;
 
-    /**
-     * 每页条数
-     */
+    //the size of every page
     protected int size;
 
-    /**
-     * 总条数
-     */
     protected long total;
 
     protected List<T> list;

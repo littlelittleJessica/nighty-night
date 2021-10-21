@@ -8,8 +8,8 @@ package com.example.nighty.enums;
  */
 public enum CodeStatusEnum {
 
-    USED("U", "已使用"),
-    NOT_USED("N", "未使用");
+    USED("U", "used"),
+    NOT_USED("N", "unused");
 
     private String code;
 

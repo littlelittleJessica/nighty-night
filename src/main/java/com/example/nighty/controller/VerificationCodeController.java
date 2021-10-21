@@ -26,9 +26,8 @@ public class VerificationCodeController {
     @RequestMapping(value = "send", method = RequestMethod.POST)
     @ResponseBody
     public ServerResponse send(String email) {
-        LOG.info("发送邮件请求开始：{}", email);
+        LOG.info("Starting the request of sending email：{}", email);
         ServerResponse response = verificationCodeService.sendCode(email);
-        LOG.info("发送邮件请求结束");
         return response;
     }
 }

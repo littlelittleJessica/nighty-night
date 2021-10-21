@@ -13,9 +13,7 @@ import java.util.List;
  * @Date 2021/8/28
  */
 public class CopyUtil {
-    /**
-     * 单体复制
-     */
+
     public static <T> T copy(Object source, Class<T> clazz) {
         if (source == null) {
             return null;
@@ -31,9 +29,6 @@ public class CopyUtil {
         return obj;
     }
 
-    /**
-     * 列表复制
-     */
     public static <T> List<T> copyList(List source, Class<T> clazz) {
         List<T> target = new ArrayList<>();
         if (!CollectionUtils.isEmpty(source)){

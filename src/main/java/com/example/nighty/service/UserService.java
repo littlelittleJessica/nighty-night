@@ -38,32 +38,32 @@ public class UserService {
     private UserMapper userMapper;
 
     /**
-     * 用户名登录
+     * Login by username and password
      */
     public ServerResponse<UserLoginResp> login(UserLoginReq req) {
         User userDB = selectByUsername(req.getUsername());
         if (ObjectUtils.isEmpty(userDB)) {
-            //用户名不存在
-            LOG.info("用户名不存在，{}", req.getUsername());
-            return ServerResponse.createByErrorMessage("用户名不存在");
+            //Username does not exist
+            LOG.info("Username does not exist, {}", req.getUsername());
+            return ServerResponse.createByErrorMessage("Username does not exist");
         } else {
             if (userDB.getPassword().equals(req.getPassword())) {
-                //登录成功
-                LOG.info("登录成功，用户名：{}，密码：{}", req.getUsername(), req.getPassword());
+                //Login succeeded
+                LOG.info("Login succeeded, username: {}, password: {}", req.getUsername(), req.getPassword());
 
                 UserLoginResp resp = CopyUtil.copy(userDB, UserLoginResp.class);
-                return ServerResponse.createBySuccess("登录成功", resp);
+                return ServerResponse.createBySuccess("Login succeeded", resp);
             } else {
-                //密码不正确
-                LOG.info("密码不正确，输入密码：{}，数据库密码：{}", req.getPassword(), userDB.getPassword());
-                return ServerResponse.createByErrorMessage("密码错误");
+                //Incorrect password
+                LOG.info("Incorrect password, worng password{}, password in database: {}", req.getPassword(), userDB.getPassword());
+                return ServerResponse.createByErrorMessage("Incorrect password");
             }
         }
     }
 
 
     /**
-     * 用户注册
+     * Register
      */
     public ServerResponse<UserLoginResp> register(UserRegisterReq user) {
         ServerResponse validResponse = this.checkValid(user.getUsername(), Const.USERNAME);
@@ -74,57 +74,55 @@ public class UserService {
         if (!validResponse.isSuccess()) {
             return validResponse;
         }
-        //MD5加密
         user.setPassword(DigestUtils.md5DigestAsHex(user.getPassword().getBytes()));
 
         User userNew = CopyUtil.copy(user, User.class);
         int resultCount = userMapper.insertSelective(userNew);
         if (resultCount == 0) {
-            return ServerResponse.createByErrorMessage("注册失败");
+            return ServerResponse.createByErrorMessage("Register failed");
         }
 
         User userDB = selectByUsername(user.getUsername());
         UserLoginResp userLoginResp = CopyUtil.copy(userDB, UserLoginResp.class);
-        return ServerResponse.createBySuccess("注册成功", userLoginResp);
+        return ServerResponse.createBySuccess("Register succeeded", userLoginResp);
     }
 
     /**
-     * 获取当前用户信息
+     * Get the user information
      */
     public ServerResponse<User> getInformation(Long userId) {
         User user = userMapper.selectByPrimaryKey(userId);
         if (user == null) {
-            ServerResponse.createByErrorMessage("找不到当前用户");
+            ServerResponse.createByErrorMessage("Current user not found");
         }
-        return ServerResponse.createBySuccess("获取用户信息成功", user);
+        return ServerResponse.createBySuccess("Get user information succeeded", user);
     }
 
     /**
-     * 校验用户名和学号
+     * verify username and email
      */
     public ServerResponse<String> checkValid(String str, String type) {
         if (StringUtils.isNotBlank(type)) {
-            //开始校验
             if (Const.USERNAME.equals(type)) {
                 User userDB = selectByUsername(str);
                 if (userDB != null) {
-                    return ServerResponse.createByErrorMessage("用户名已存在");
+                    return ServerResponse.createByErrorMessage("The username already exists");
                 }
             }
             if (Const.EMIAL.equals(type)) {
                 User userDB = selectByStuNo(str);
                 if (userDB != null) {
-                    return ServerResponse.createByErrorMessage("邮箱已存在");
+                    return ServerResponse.createByErrorMessage("The email already exists");
                 }
             }
         } else {
-            return ServerResponse.createByErrorMessage("参数错误");
+            return ServerResponse.createByErrorMessage("wrong");
         }
-        return ServerResponse.createBySuccessMessage("校验成功");
+        return ServerResponse.createBySuccessMessage("verify succeeded");
     }
 
     /**
-     * 通过用户名在数据库中查找用户
+     * Search user in database by username
      */
     public User selectByUsername(String Username) {
         UserExample userExample = new UserExample();
@@ -139,7 +137,7 @@ public class UserService {
     }
 
     /**
-     * 通过手机号在数据库中查找用户
+     * Search user in database by email
      */
     public User selectByStuNo(String email) {
         UserExample userExample = new UserExample();
@@ -154,33 +152,32 @@ public class UserService {
     }
 
     /**
-     * 登录状态修改密码
+     * Reset Password
      */
     public ServerResponse<String> resetPassword(UserResetPasswordReq req, Long id) {
         User userDB = userMapper.selectByPrimaryKey(id);
         String passwordDB = userDB.getPassword();
         if (!req.getPasswordOld().equals(passwordDB)) {
-            return ServerResponse.createByErrorMessage("旧密码错误");
+            return ServerResponse.createByErrorMessage("Current password incorrect");
         }
         userDB.setPassword(DigestUtils.md5DigestAsHex(req.getPasswordNew().getBytes()));
         int updateCount = userMapper.updateByPrimaryKeySelective(userDB);
         if (updateCount > 0) {
-            return ServerResponse.createBySuccessMessage("更新密码成功");
+            return ServerResponse.createBySuccessMessage("Reset password succeeded");
         }
-        return ServerResponse.createByErrorMessage("密码更新失败");
+        return ServerResponse.createByErrorMessage("Reset Password failed");
     }
 
     /**
-     * 更新用户信息
+     * update user information
      */
     public ServerResponse<UserUpdateResp> updateInformation(UserUpdateReq user) {
-        //需要校验email，校验新的email是否已存在，并且存在的email如果相同的话，不能是当前用户的
         UserExample userExample = new UserExample();
         UserExample.Criteria criteria = userExample.createCriteria();
         criteria.andEmailEqualTo(user.getEmail());
         List<User> userList = userMapper.selectByExample(userExample);
         if (!CollectionUtils.isEmpty(userList) && userList.get(0).getId() != user.getId()) {
-            return ServerResponse.createByErrorMessage("email已存在，请更换email再尝试更新");
+            return ServerResponse.createByErrorMessage("Email exists");
         }
 
         UserExample userExample2 = new UserExample();
@@ -188,7 +185,7 @@ public class UserService {
         criteria2.andUsernameEqualTo(user.getUsername());
         List<User> userList2 = userMapper.selectByExample(userExample2);
         if (!CollectionUtils.isEmpty(userList2) && userList2.get(0).getId() != user.getId()) {
-            return ServerResponse.createByErrorMessage("username已存在，请更换username再尝试更新");
+            return ServerResponse.createByErrorMessage("Username exists");
         }
 
         User userNew = CopyUtil.copy(user, User.class);
@@ -196,8 +193,8 @@ public class UserService {
 
         int updateCount = userMapper.updateByPrimaryKeySelective(userNew);
         if (updateCount > 0) {
-            return ServerResponse.createBySuccess("更新个人信息成功", updateUser);
+            return ServerResponse.createBySuccess("Update information succeeded", updateUser);
         }
-        return ServerResponse.createByErrorMessage("更新个人信息失败");
+        return ServerResponse.createByErrorMessage("Update information failed");
     }
 }

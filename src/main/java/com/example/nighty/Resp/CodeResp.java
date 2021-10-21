@@ -11,17 +11,14 @@ import java.util.Date;
  * @Date 2021/10/13
  */
 public class CodeResp {
-    //邮箱
     private String email;
 
-    //验证码
     private String code;
 
-    //生成时间
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date at;
 
-    //用途|枚举[SmsStatusEnum]：USED("U", "已使用"), NOT_USED("N", "未使用")
+    //status|enum[StatusEnum]：USED("U", "used"), NOT_USED("N", "unused")
     private String status;
 
     public String getEmail() {

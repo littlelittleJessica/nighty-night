@@ -34,7 +34,7 @@ public class UserVoiceService {
     private VoiceMapper voiceMapper;
 
     /**
-     * 查询某用户的收藏音乐列表
+     * List the favorite voice of the user by category
      */
     public PageReq listFavorite(User user, PageReq pageReq, String category) {
 
@@ -61,7 +61,7 @@ public class UserVoiceService {
     }
 
     /**
-     * 用户收藏音乐
+     * Favorite voice
      */
     public ServerResponse favorite(UserVoice userVoice) {
         UserVoice userVoiceDB = this.select(userVoice.getUserId(), userVoice.getVoiceId());
@@ -72,7 +72,7 @@ public class UserVoiceService {
     }
 
     /**
-     * 用户取消收藏音乐
+     * Unfavorite voice
      */
     public ServerResponse unfavorite(UserVoice userVoice) {
         UserVoice userVoiceDB = this.select(userVoice.getUserId(), userVoice.getVoiceId());
@@ -87,7 +87,7 @@ public class UserVoiceService {
     }
 
     /**
-     * 根据userId和voiceId查询记录
+     * search by userId and voiceId
      */
     public UserVoice select(Long userId, Long voiceId) {
         UserVoiceExample example = new UserVoiceExample();

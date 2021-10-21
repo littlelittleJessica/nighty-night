@@ -8,9 +8,9 @@ package com.example.nighty.common;
  */
 public enum VoiceCategory {
 
-    MUSIC("M", "轻音乐"),
-    STORY("S", "睡眠故事"),
-    WHITE_NOISE("W", "白噪音");
+    MUSIC("M", "Light Music"),
+    STORY("S", "Sleep Story"),
+    WHITE_NOISE("W", "White Noise");
 
     private String code;
 

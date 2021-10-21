@@ -12,18 +12,17 @@ import javax.mail.internet.MimeMessage;
  * @Date 2021/10/13
  */
 public class SendMail {
-    //发送html格式邮件
+    //send html email
     public void sendHtmlMail(MimeMessage message,String username,String recipient, String subject, String content) {
         try {
-            //true表示需要创建一个multipart message
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
             helper.setFrom(username);
             helper.setTo(recipient);
             helper.setSubject(subject);
             helper.setText(content, true);
-            System.out.println("html格式邮件发送中...");
+            System.out.println("Mail sending...");
         } catch (MessagingException e) {
-            System.out.println("html格式邮件发送失败！");
+            System.out.println("Send email failed!");
         }
     }
 }

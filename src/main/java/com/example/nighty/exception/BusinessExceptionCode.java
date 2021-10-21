@@ -8,9 +8,9 @@ package com.example.nighty.exception;
  */
 public enum BusinessExceptionCode {
 
-    EMAIL_CODE_TOO_FREQUENT("邮件请求过于频繁"),
-    EMAIL_CODE_ERROR("邮件验证码错误"),
-    EMAIL_CODE_EXPIRED("邮件验证码不存在或已过期，请重新发送邮件"),
+    EMAIL_CODE_TOO_FREQUENT("email send too frequent"),
+    EMAIL_CODE_ERROR("verification code is incorrect"),
+    EMAIL_CODE_EXPIRED("verification code is expired or invalid"),
     ;
 
     private String desc;
