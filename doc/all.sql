@@ -107,7 +107,6 @@ create table `daily`
 (
     `id`          bigint auto_increment not null comment 'id',
     `pic`       varchar(200) comment 'picture url',
-    `sentence` varchar(2000) comment 'sentence',
     `date` date not null comment 'date',
     primary key (`id`)
 ) engine = innodb

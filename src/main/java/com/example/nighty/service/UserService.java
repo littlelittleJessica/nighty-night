@@ -68,7 +68,7 @@ public class UserService {
                 return ServerResponse.createBySuccess("Login succeeded", resp);
             } else {
                 //Incorrect password
-                LOG.info("Incorrect password, worng password{}, password in database: {}", req.getPassword(), userDB.getPassword());
+                LOG.info("Incorrect password, wrong password{}, password in database: {}", req.getPassword(), userDB.getPassword());
                 return ServerResponse.createByErrorMessage("Incorrect password");
             }
         }
@@ -77,13 +77,10 @@ public class UserService {
     private boolean isAdmin(User userDB) {
         RoleUserExample example = new RoleUserExample();
         RoleUserExample.Criteria criteria = example.createCriteria();
-        criteria.andIdEqualTo(userDB.getId());
+        criteria.andUserIdEqualTo(userDB.getId());
         List<RoleUser> userRole = roleUserMapper.selectByExample(example);
         if (userRole.size() > 0 && !CollectionUtils.isEmpty(userRole)) {
-            if (userRole.get(0).getRoleId() == 1) {
-                return true;
-            }
-            return false;
+            return userRole.get(0).getRoleId() == 1;
         }
         return false;
     }
