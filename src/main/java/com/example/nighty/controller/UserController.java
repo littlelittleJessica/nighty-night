@@ -65,6 +65,9 @@ public class UserController {
             User user = CopyUtil.copy(resp.getData(), User.class);
             session.setAttribute(Const.CURRENT_USER, user);
         }
+        if (resp.getData().getRole().equals("admin")) {
+            session.setAttribute(Const.ROLE, "admin");
+        }
         return resp;
 
     }

@@ -7,8 +7,11 @@ import com.example.nighty.Req.UserUpdateReq;
 import com.example.nighty.Resp.UserLoginResp;
 import com.example.nighty.Resp.UserUpdateResp;
 import com.example.nighty.common.ServerResponse;
+import com.example.nighty.domain.RoleUser;
+import com.example.nighty.domain.RoleUserExample;
 import com.example.nighty.domain.User;
 import com.example.nighty.domain.UserExample;
+import com.example.nighty.mapper.RoleUserMapper;
 import com.example.nighty.mapper.UserMapper;
 import com.example.nighty.util.CopyUtil;
 import com.example.nighty.common.Const;
@@ -37,6 +40,9 @@ public class UserService {
     @Resource
     private UserMapper userMapper;
 
+    @Resource
+    private RoleUserMapper roleUserMapper;
+
     /**
      * Login by username and password
      */
@@ -52,6 +58,13 @@ public class UserService {
                 LOG.info("Login succeeded, username: {}, password: {}", req.getUsername(), req.getPassword());
 
                 UserLoginResp resp = CopyUtil.copy(userDB, UserLoginResp.class);
+
+                if (isAdmin(userDB)) {
+                    resp.setRole("admin");
+                } else {
+                    resp.setRole("common");
+                }
+
                 return ServerResponse.createBySuccess("Login succeeded", resp);
             } else {
                 //Incorrect password
@@ -59,6 +72,20 @@ public class UserService {
                 return ServerResponse.createByErrorMessage("Incorrect password");
             }
         }
+    }
+
+    private boolean isAdmin(User userDB) {
+        RoleUserExample example = new RoleUserExample();
+        RoleUserExample.Criteria criteria = example.createCriteria();
+        criteria.andIdEqualTo(userDB.getId());
+        List<RoleUser> userRole = roleUserMapper.selectByExample(example);
+        if (userRole.size() > 0 && !CollectionUtils.isEmpty(userRole)) {
+            if (userRole.get(0).getRoleId() == 1) {
+                return true;
+            }
+            return false;
+        }
+        return false;
     }
 
 

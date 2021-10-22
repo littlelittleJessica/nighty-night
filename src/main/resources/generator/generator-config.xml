@@ -39,8 +39,10 @@
 
 <!--        <table tableName="user" domainObjectName="User"/>-->
 <!--        <table tableName="verification_code" domainObjectName="VerificationCode"/>-->
-        <table tableName="voice" domainObjectName="Voice"/>
-        <table tableName="voice_file" domainObjectName="VoiceFile"/>
-        <table tableName="user_voice" domainObjectName="UserVoice"/>
+<!--        <table tableName="voice" domainObjectName="Voice"/>-->
+<!--        <table tableName="voice_file" domainObjectName="VoiceFile"/>-->
+<!--        <table tableName="user_voice" domainObjectName="UserVoice"/>-->
+<!--        <table tableName="role" domainObjectName="role"/>-->
+        <table tableName="role_user" domainObjectName="RoleUser"/>
     </context>
 </generatorConfiguration>

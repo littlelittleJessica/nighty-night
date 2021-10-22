@@ -84,3 +84,31 @@ insert into `role`
 values ('1', 'admin', 'administrator who can update resources');
 insert into `role`
 values ('2', 'user', 'common user');
+
+# role and user related
+drop table if exists `role_user`;
+create table `role_user`
+(
+    `id`      bigint auto_increment not null comment 'id',
+    `role_id` bigint                not null comment 'role|id',
+    `user_id` bigint                not null comment 'user|id',
+    primary key (`id`)
+) engine = innodb
+  default charset = utf8mb4 comment ='role and user related';
+
+insert into `role_user` values ('1', '1', '13');
+insert into `role_user` values ('2', '2', '1');
+insert into `role_user` values ('3', '2', '12');
+
+
+# daily
+drop table if exists `daily`;
+create table `daily`
+(
+    `id`          bigint auto_increment not null comment 'id',
+    `pic`       varchar(200) comment 'picture url',
+    `sentence` varchar(2000) comment 'sentence',
+    `date` date not null comment 'date',
+    primary key (`id`)
+) engine = innodb
+  default charset = utf8mb4 comment ='daily';

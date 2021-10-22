@@ -16,6 +16,8 @@ public class UserLoginResp {
 
     private String token;
 
+    private String role;
+
     public String getUsername() {
         return username;
     }
@@ -48,6 +50,14 @@ public class UserLoginResp {
         this.token = token;
     }
 
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("UserLoginResp{");
@@ -55,6 +65,7 @@ public class UserLoginResp {
         sb.append(", username='").append(username).append('\'');
         sb.append(", email='").append(email).append('\'');
         sb.append(", token='").append(token).append('\'');
+        sb.append(", role='").append(role).append('\'');
         sb.append('}');
         return sb.toString();
     }
