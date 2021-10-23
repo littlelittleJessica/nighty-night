@@ -14,7 +14,7 @@ import javax.annotation.Resource;
  * @Date 2021/10/21
  */
 @Service
-public class AdminService {
+public class DailyService {
 
     @Resource
     private DailyMapper dailyMapper;

@@ -111,3 +111,22 @@ create table `daily`
     primary key (`id`)
 ) engine = innodb
   default charset = utf8mb4 comment ='daily';
+
+# file
+drop table if exists `file`;
+create table `file` (
+                        `id` char(8) not null default '' comment 'id',
+                        `path` varchar(100) not null comment 'url',
+                        `name` varchar(100) comment 'name',
+                        `suffix` varchar(10) comment 'suffix',
+                        `size` int comment 'size|Byte',
+                        `created_at` datetime(3) comment 'created time',
+                        `updated_at` datetime(3) comment 'updated time',
+                        `shard_index` int comment '已上传分片',
+                        `shard_size` int comment '分片大小|B',
+                        `shard_total` int comment '分片总数',
+                        `key` varchar(32) comment '文件标识',
+                        primary key (`id`),
+                        unique key `path_unique` (`path`),
+                        unique key `key` (`key`)
+) engine=innodb default charset=utf8mb4 comment='文件';

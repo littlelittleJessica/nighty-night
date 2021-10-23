@@ -2,12 +2,11 @@ package com.example.nighty.controller;
 
 import com.example.nighty.common.ServerResponse;
 import com.example.nighty.domain.Daily;
-import com.example.nighty.service.AdminService;
+import com.example.nighty.service.DailyService;
 import com.example.nighty.util.UuidUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,12 +23,12 @@ import java.util.Date;
  */
 @RestController
 @RequestMapping("/admin/")
-public class AdminController {
+public class DailyController {
 
-    private static final Logger LOG = LoggerFactory.getLogger(AdminController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DailyController.class);
 
     @Resource
-    private AdminService adminService;
+    private DailyService dailyService;
 
     /**
      * upload image file
@@ -55,6 +54,6 @@ public class AdminController {
         daily.setPic(imageFilePath);
         daily.setDate(new Date());
 
-        return adminService.updateDaily(daily);
+        return dailyService.updateDaily(daily);
     }
 }

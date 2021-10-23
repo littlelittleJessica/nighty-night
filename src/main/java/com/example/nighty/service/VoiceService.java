@@ -1,13 +1,14 @@
 package com.example.nighty.service;
 
 import com.example.nighty.Req.PageReq;
-import com.example.nighty.common.VoiceCategory;
+import com.example.nighty.common.ServerResponse;
 import com.example.nighty.domain.Voice;
 import com.example.nighty.domain.VoiceExample;
 import com.example.nighty.mapper.VoiceMapper;
 import com.example.nighty.util.CopyUtil;
 import com.github.pagehelper.PageHelper;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -33,5 +34,33 @@ public class VoiceService {
         voiceExample.createCriteria().andCategoryEqualTo(catogory);
         List<Voice> voiceList = voiceMapper.selectByExample(voiceExample);
         return CopyUtil.copyList(voiceList, Voice.class);
+    }
+
+    /**
+     * save voice
+     */
+    public ServerResponse save(Voice voice) {
+        if (StringUtils.isEmpty(voice.getId())) {
+            voiceMapper.insert(voice);
+        } else {
+            voiceMapper.updateByPrimaryKey(voice);
+        }
+        return ServerResponse.createBySuccess("Save voice succeeded", voice);
+    }
+
+    /**
+     * delete
+     */
+    public void delete(Long id) {
+        voiceMapper.deleteByPrimaryKey(id);
+    }
+
+    /**
+     * save cover
+     */
+    public ServerResponse saveCover(String imageFilePath, Long id) {
+        Voice voice = voiceMapper.selectByPrimaryKey(id);
+        voice.setCover(imageFilePath);
+        return ServerResponse.createBySuccess("Update cover succeeded", voice);
     }
 }
