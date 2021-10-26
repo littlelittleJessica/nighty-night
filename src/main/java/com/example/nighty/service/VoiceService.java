@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -31,9 +32,16 @@ public class VoiceService {
     public List<Voice> listByCategory(PageReq pageReq, String catogory) {
         PageHelper.startPage(pageReq.getPage(), pageReq.getSize());
         VoiceExample voiceExample = new VoiceExample();
-        voiceExample.createCriteria().andCategoryEqualTo(catogory);
-        List<Voice> voiceList = voiceMapper.selectByExample(voiceExample);
-        return CopyUtil.copyList(voiceList, Voice.class);
+        if (!StringUtils.isEmpty(catogory) && catogory.length() > 0) {
+            voiceExample.createCriteria().andCategoryEqualTo(catogory);
+            List<Voice> voiceList = voiceMapper.selectByExample(voiceExample);
+            return CopyUtil.copyList(voiceList, Voice.class);
+        } else {
+            String[] categorys = {"M","S","W"};
+            voiceExample.createCriteria().andCategoryIn(Arrays.asList(categorys));
+            List<Voice> voiceList = voiceMapper.selectByExample(voiceExample);
+            return CopyUtil.copyList(voiceList, Voice.class);
+        }
     }
 
     /**
@@ -42,8 +50,17 @@ public class VoiceService {
     public ServerResponse save(Voice voice) {
         if (StringUtils.isEmpty(voice.getId())) {
             voiceMapper.insert(voice);
+
+            VoiceExample voiceExample = new VoiceExample();
+            VoiceExample.Criteria criteria = voiceExample.createCriteria();
+            criteria.andNameEqualTo(voice.getName());
+            List<Voice> voiceList = voiceMapper.selectByExample(voiceExample);
+            Long id = voiceList.get(0).getId();
+
+            voice.setId(id);
         } else {
             voiceMapper.updateByPrimaryKey(voice);
+
         }
         return ServerResponse.createBySuccess("Save voice succeeded", voice);
     }

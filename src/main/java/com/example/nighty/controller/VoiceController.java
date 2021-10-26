@@ -52,9 +52,9 @@ public class VoiceController {
     /**
      * delete voice
      */
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("delete")
     @ResponseBody
-    public ServerResponse delete(@PathVariable Long id) {
+    public ServerResponse delete(Long id) {
         voiceService.delete(id);
         return ServerResponse.createBySuccessMessage("Delete voice succeeded");
     }

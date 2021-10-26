@@ -13,9 +13,6 @@ create table `user`
 ) engine = innodb
   default charset = utf8mb4 comment ='user';
 
-insert into `user` (id, `username`, `password`, `email`, `photo`)
-values (1, 'test', 'C18F80EFEE1FA267583B5DF3D7E948C3', '446067382@qq.com', '');
-
 # email verification code
 drop table if exists `verification_code`;
 create table `verification_code`
@@ -96,37 +93,62 @@ create table `role_user`
 ) engine = innodb
   default charset = utf8mb4 comment ='role and user related';
 
-insert into `role_user` values ('1', '1', '13');
-insert into `role_user` values ('2', '2', '1');
-insert into `role_user` values ('3', '2', '12');
+insert into `role_user`
+values ('1', '1', '13');
+insert into `role_user`
+values ('2', '2', '1');
+insert into `role_user`
+values ('3', '2', '12');
 
 
 # daily
 drop table if exists `daily`;
 create table `daily`
 (
-    `id`          bigint auto_increment not null comment 'id',
-    `pic`       varchar(200) comment 'picture url',
-    `date` date not null comment 'date',
+    `id`   bigint auto_increment not null comment 'id',
+    `pic`  varchar(200) comment 'picture url',
+    `date` date                  not null comment 'date',
     primary key (`id`)
 ) engine = innodb
   default charset = utf8mb4 comment ='daily';
 
 # file
 drop table if exists `file`;
-create table `file` (
-                        `id` char(8) not null default '' comment 'id',
-                        `path` varchar(100) not null comment 'url',
-                        `name` varchar(100) comment 'name',
-                        `suffix` varchar(10) comment 'suffix',
-                        `size` int comment 'size|Byte',
-                        `created_at` datetime(3) comment 'created time',
-                        `updated_at` datetime(3) comment 'updated time',
-                        `shard_index` int comment '已上传分片',
-                        `shard_size` int comment '分片大小|B',
-                        `shard_total` int comment '分片总数',
-                        `key` varchar(32) comment '文件标识',
-                        primary key (`id`),
-                        unique key `path_unique` (`path`),
-                        unique key `key` (`key`)
-) engine=innodb default charset=utf8mb4 comment='文件';
+create table `file`
+(
+    `id`          char(8)      not null default '' comment 'id',
+    `path`        varchar(100) not null comment 'url',
+    `name`        varchar(100) comment 'name',
+    `suffix`      varchar(10) comment 'suffix',
+    `size`        int comment 'size|Byte',
+    `created_at`  datetime(3) comment 'created time',
+    `updated_at`  datetime(3) comment 'updated time',
+    `shard_index` int comment '已上传分片',
+    `shard_size`  int comment '分片大小|B',
+    `shard_total` int comment '分片总数',
+    `key`         varchar(32) comment '文件标识',
+    primary key (`id`),
+    unique key `path_unique` (`path`),
+    unique key `key` (`key`)
+) engine = innodb
+  default charset = utf8mb4 comment ='文件';
+
+# sleep record
+drop table if exists `record`;
+create table `record`
+(
+    `id`          bigint auto_increment not null comment 'id',
+    `user_id`     bigint                not null comment 'user ID',
+    `date`        char(10)                  not null comment 'date',
+    `sleep_time`  char(10)           not null comment 'sleep time of last night',
+    `wakeup_time` char(10)           not null comment 'wake up time of last night',
+    `emotion`     char(1) comment 'emotion|enum[sleep_emotion]: RELAX("R", "Relax and comfort"),
+ANXIETY("A", "Anxious and depressed"),STRESSFUL("S", "Stressed out"), TIRED("T", "Tired and exhausted"),
+NONE("N", "None of them")',
+    `dream`       char(1) comment 'dream|enum[dream]: NO("N", "No dreams"),GOOD("G", "Had sweet dreams"),
+COMMON("C","Had common dreams", NIGHTMARES("M","Had nightmares"))',
+    `evaluation`  char(1) comment 'feeling|enum[evaluation]: AWESOME("A", "Awesome"),Good("G", "Good"),
+BAD("B", "Bad"), TERRIBLE("T", "Terrible")',
+    primary key (`id`)
+) engine = innodb
+  default charset = utf8mb4 comment ='sleep record';
