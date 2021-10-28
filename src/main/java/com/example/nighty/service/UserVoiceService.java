@@ -5,6 +5,7 @@ import com.example.nighty.common.ServerResponse;
 import com.example.nighty.domain.*;
 import com.example.nighty.mapper.UserVoiceMapper;
 import com.example.nighty.mapper.VoiceMapper;
+import com.example.nighty.util.CopyUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
@@ -52,6 +53,34 @@ public class UserVoiceService {
         VoiceExample voiceExample = new VoiceExample();
         voiceExample.createCriteria().andCategoryEqualTo(category)
                 .andIdIn(Arrays.asList(voiceId));
+        List<Voice> voiceList = voiceMapper.selectByExample(voiceExample);
+
+        PageInfo<Voice> pageInfo = new PageInfo<>(voiceList);
+        pageReq.setTotal(pageInfo.getTotal());
+        pageReq.setList(voiceList);
+        return pageReq;
+    }
+
+    /**
+     * search voice by name
+     */
+    public PageReq searchByName(User user, PageReq pageReq, String name) {
+        UserVoiceExample userVoiceExample = new UserVoiceExample();
+        userVoiceExample.createCriteria().andUserIdEqualTo(user.getId());
+        List<UserVoice> userVoiceList = userVoiceMapper.selectByExample(userVoiceExample);
+
+        Long[] voiceId = new Long[userVoiceList.size()];
+        if (!CollectionUtils.isEmpty(userVoiceList) && userVoiceList.size() > 0) {
+            for (int i = 0; i < voiceId.length; i++) {
+                voiceId[i] = userVoiceList.get(i).getVoiceId();
+            }
+        }
+
+        PageHelper.startPage(pageReq.getPage(), pageReq.getSize());
+        VoiceExample voiceExample = new VoiceExample();
+        voiceExample.createCriteria().andNameLike("%" + name + "%")
+                .andIdIn(Arrays.asList(voiceId));
+
         List<Voice> voiceList = voiceMapper.selectByExample(voiceExample);
 
         PageInfo<Voice> pageInfo = new PageInfo<>(voiceList);

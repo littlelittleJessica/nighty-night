@@ -7,6 +7,7 @@ import com.example.nighty.domain.VoiceExample;
 import com.example.nighty.mapper.VoiceMapper;
 import com.example.nighty.util.CopyUtil;
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -29,19 +30,39 @@ public class VoiceService {
     /**
      * query voice by category
      */
-    public List<Voice> listByCategory(PageReq pageReq, String catogory) {
+    public PageReq listByCategory(PageReq pageReq, String catogory) {
         PageHelper.startPage(pageReq.getPage(), pageReq.getSize());
         VoiceExample voiceExample = new VoiceExample();
         if (!StringUtils.isEmpty(catogory) && catogory.length() > 0) {
             voiceExample.createCriteria().andCategoryEqualTo(catogory);
             List<Voice> voiceList = voiceMapper.selectByExample(voiceExample);
-            return CopyUtil.copyList(voiceList, Voice.class);
+            PageInfo<Voice> pageInfo = new PageInfo<>(voiceList);
+            pageReq.setTotal(pageInfo.getTotal());
+            pageReq.setList(voiceList);
+            return pageReq;
         } else {
-            String[] categorys = {"M","S","W"};
+            String[] categorys = {"M", "S", "W"};
             voiceExample.createCriteria().andCategoryIn(Arrays.asList(categorys));
             List<Voice> voiceList = voiceMapper.selectByExample(voiceExample);
-            return CopyUtil.copyList(voiceList, Voice.class);
+            PageInfo<Voice> pageInfo = new PageInfo<>(voiceList);
+            pageReq.setTotal(pageInfo.getTotal());
+            pageReq.setList(voiceList);
+            return pageReq;
         }
+    }
+
+    /**
+     * search voice by name
+     */
+    public PageReq searchByName(PageReq pageReq, String name) {
+        PageHelper.startPage(pageReq.getPage(), pageReq.getSize());
+        VoiceExample voiceExample = new VoiceExample();
+        voiceExample.createCriteria().andNameLike("%" + name + "%");
+        List<Voice> voiceList = voiceMapper.selectByExample(voiceExample);
+        PageInfo<Voice> pageInfo = new PageInfo<>(voiceList);
+        pageReq.setTotal(pageInfo.getTotal());
+        pageReq.setList(voiceList);
+        return pageReq;
     }
 
     /**

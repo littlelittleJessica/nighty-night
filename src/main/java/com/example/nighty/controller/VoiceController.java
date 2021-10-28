@@ -36,8 +36,16 @@ public class VoiceController {
     @GetMapping("list")
     @ResponseBody
     public ServerResponse listByCategory(PageReq pageReq, String category) {
-        List<Voice> voiceList = voiceService.listByCategory(pageReq, category);
-        return ServerResponse.createBySuccess("Query voice list success", voiceList);
+        return ServerResponse.createBySuccess("Query voice list success", voiceService.listByCategory(pageReq, category));
+    }
+
+    /**
+     * search voice by name
+     */
+    @GetMapping("search")
+    @ResponseBody
+    public ServerResponse searchByName(PageReq pageReq, String name) {
+        return ServerResponse.createBySuccess("Search voice list success", voiceService.searchByName(pageReq, name));
     }
 
     /**

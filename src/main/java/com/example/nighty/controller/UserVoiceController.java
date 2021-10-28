@@ -5,6 +5,7 @@ import com.example.nighty.common.Const;
 import com.example.nighty.common.ServerResponse;
 import com.example.nighty.domain.User;
 import com.example.nighty.domain.UserVoice;
+import com.example.nighty.domain.Voice;
 import com.example.nighty.service.UserVoiceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * @Description
@@ -35,10 +37,23 @@ public class UserVoiceController {
     @ResponseBody
     public ServerResponse listFavorite(HttpServletRequest request, PageReq pageReq, String category) {
         User user = (User) request.getSession().getAttribute(Const.CURRENT_USER);
-        if(user==null){
+        if (user == null) {
             return ServerResponse.createByErrorMessage("The user has not logged in");
         }
         return ServerResponse.createBySuccess("Query user favorite list success", userVoiceService.listFavorite(user, pageReq, category));
+    }
+
+    /**
+     * search voice by name
+     */
+    @GetMapping("search")
+    @ResponseBody
+    public ServerResponse searchByName(HttpServletRequest request, PageReq pageReq, String name) {
+        User user = (User) request.getSession().getAttribute(Const.CURRENT_USER);
+        if (user == null) {
+            return ServerResponse.createByErrorMessage("The user has not logged in");
+        }
+        return ServerResponse.createBySuccess("Search voice list success", userVoiceService.searchByName(user, pageReq, name));
     }
 
     /**
