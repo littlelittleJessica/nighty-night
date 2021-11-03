@@ -33,44 +33,46 @@ public class UserVoiceController {
     /**
      * List the favorite voice of the user by category
      */
-    @PostMapping("list_favorite")
-    @ResponseBody
-    public ServerResponse listFavorite(HttpServletRequest request, PageReq pageReq, String category) {
+    @PostMapping("list_favorite/{category}")
+    public ServerResponse listFavorite(HttpServletRequest request, @PathVariable String category) {
         User user = (User) request.getSession().getAttribute(Const.CURRENT_USER);
         if (user == null) {
             return ServerResponse.createByErrorMessage("The user has not logged in");
         }
+        PageReq pageReq = new PageReq();
+        pageReq.setPage(1);
+        pageReq.setSize(8);
         return ServerResponse.createBySuccess("Query user favorite list success", userVoiceService.listFavorite(user, pageReq, category));
     }
 
     /**
      * search voice by name
      */
-    @GetMapping("search")
-    @ResponseBody
-    public ServerResponse searchByName(HttpServletRequest request, PageReq pageReq, String name) {
+    @GetMapping("search/{name}")
+    public ServerResponse searchByName(HttpServletRequest request, @PathVariable String name) {
         User user = (User) request.getSession().getAttribute(Const.CURRENT_USER);
         if (user == null) {
             return ServerResponse.createByErrorMessage("The user has not logged in");
         }
+        PageReq pageReq = new PageReq();
+        pageReq.setPage(1);
+        pageReq.setSize(8);
         return ServerResponse.createBySuccess("Search voice list success", userVoiceService.searchByName(user, pageReq, name));
     }
 
     /**
      * Favorite voice
      */
-    @RequestMapping(value = "favorite", method = RequestMethod.POST)
-    @ResponseBody
-    public ServerResponse favorite(UserVoice userVoice) {
+    @PostMapping(value = "favorite")
+    public ServerResponse favorite(@RequestBody UserVoice userVoice) {
         return userVoiceService.favorite(userVoice);
     }
 
     /**
      * Unfavorite voice
      */
-    @RequestMapping(value = "unfavorite", method = RequestMethod.DELETE)
-    @ResponseBody
-    public ServerResponse unfavorite(UserVoice userVoice) {
+    @DeleteMapping(value = "unfavorite")
+    public ServerResponse unfavorite(@RequestBody UserVoice userVoice) {
         return userVoiceService.unfavorite(userVoice);
     }
 }

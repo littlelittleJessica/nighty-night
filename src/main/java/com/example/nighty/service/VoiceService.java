@@ -5,7 +5,6 @@ import com.example.nighty.common.ServerResponse;
 import com.example.nighty.domain.Voice;
 import com.example.nighty.domain.VoiceExample;
 import com.example.nighty.mapper.VoiceMapper;
-import com.example.nighty.util.CopyUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;
@@ -33,14 +32,7 @@ public class VoiceService {
     public PageReq listByCategory(PageReq pageReq, String catogory) {
         PageHelper.startPage(pageReq.getPage(), pageReq.getSize());
         VoiceExample voiceExample = new VoiceExample();
-        if (!StringUtils.isEmpty(catogory) && catogory.length() > 0) {
-            voiceExample.createCriteria().andCategoryEqualTo(catogory);
-            List<Voice> voiceList = voiceMapper.selectByExample(voiceExample);
-            PageInfo<Voice> pageInfo = new PageInfo<>(voiceList);
-            pageReq.setTotal(pageInfo.getTotal());
-            pageReq.setList(voiceList);
-            return pageReq;
-        } else {
+        if ("All".equals(catogory)) {
             String[] categorys = {"M", "S", "W"};
             voiceExample.createCriteria().andCategoryIn(Arrays.asList(categorys));
             List<Voice> voiceList = voiceMapper.selectByExample(voiceExample);
@@ -48,6 +40,15 @@ public class VoiceService {
             pageReq.setTotal(pageInfo.getTotal());
             pageReq.setList(voiceList);
             return pageReq;
+        } else if (!StringUtils.isEmpty(catogory) && catogory.length() > 0) {
+            voiceExample.createCriteria().andCategoryEqualTo(catogory);
+            List<Voice> voiceList = voiceMapper.selectByExample(voiceExample);
+            PageInfo<Voice> pageInfo = new PageInfo<>(voiceList);
+            pageReq.setTotal(pageInfo.getTotal());
+            pageReq.setList(voiceList);
+            return pageReq;
+        } else {
+            return null;
         }
     }
 

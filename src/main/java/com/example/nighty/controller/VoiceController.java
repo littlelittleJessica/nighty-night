@@ -13,7 +13,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
 /**
  * @Description
@@ -33,18 +32,22 @@ public class VoiceController {
     /**
      * List all voice by category
      */
-    @GetMapping("list")
-    @ResponseBody
-    public ServerResponse listByCategory(PageReq pageReq, String category) {
+    @GetMapping("list/{category}")
+    public ServerResponse listByCategory(@PathVariable String category) {
+        PageReq pageReq = new PageReq();
+        pageReq.setPage(1);
+        pageReq.setSize(8);
         return ServerResponse.createBySuccess("Query voice list success", voiceService.listByCategory(pageReq, category));
     }
 
     /**
      * search voice by name
      */
-    @GetMapping("search")
-    @ResponseBody
-    public ServerResponse searchByName(PageReq pageReq, String name) {
+    @GetMapping("search/{name}")
+    public ServerResponse searchByName(@PathVariable String name) {
+        PageReq pageReq = new PageReq();
+        pageReq.setPage(1);
+        pageReq.setSize(8);
         return ServerResponse.createBySuccess("Search voice list success", voiceService.searchByName(pageReq, name));
     }
 
@@ -52,23 +55,22 @@ public class VoiceController {
      * save voice
      */
     @RequestMapping("save")
-    @ResponseBody
-    public ServerResponse save(Voice voice) {
+    public ServerResponse save(@RequestBody Voice voice) {
         return voiceService.save(voice);
     }
 
     /**
      * delete voice
      */
-    @DeleteMapping("delete")
-    @ResponseBody
-    public ServerResponse delete(Long id) {
+    @DeleteMapping("delete/{id}")
+    public ServerResponse delete(@PathVariable Long id) {
         voiceService.delete(id);
         return ServerResponse.createBySuccessMessage("Delete voice succeeded");
     }
 
     /**
      * save the cover of the voice
+     * todo:上传oss直接传链接
      */
     @RequestMapping("saveCover")
     @ResponseBody

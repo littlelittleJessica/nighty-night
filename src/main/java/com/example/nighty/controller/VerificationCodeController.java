@@ -23,9 +23,8 @@ public class VerificationCodeController {
     @Resource
     private VerificationCodeService verificationCodeService;
 
-    @RequestMapping(value = "send", method = RequestMethod.POST)
-    @ResponseBody
-    public ServerResponse send(String email) {
+    @PostMapping(value = "send/{email}")
+    public ServerResponse send(@PathVariable String email) {
         LOG.info("Starting the request of sending email：{}", email);
         ServerResponse response = verificationCodeService.sendCode(email);
         return response;

@@ -59,7 +59,6 @@ public class PageReq<T> {
         sb.append(", size=").append(size);
         sb.append(", total=").append(total);
         sb.append(", list=").append(list);
-
         sb.append('}');
         return sb.toString();
     }

@@ -43,7 +43,7 @@ public class VerificationCodeService {
         VerificationCodeExample.Criteria criteria = example.createCriteria();
         criteria.andEmailEqualTo(email)
                 .andStatusEqualTo(CodeStatusEnum.NOT_USED.getCode())
-                .andAtGreaterThan(new Date(new Date().getTime() - 60 * 1000));
+                .andAtGreaterThan(new Date(new Date().getTime() - 1 * 1000));
         List<VerificationCode> verificationCodeList = verificationCodeMapper.selectByExample(example);
 
         if (verificationCodeList == null || verificationCodeList.size() == 0) {
@@ -84,7 +84,7 @@ public class VerificationCodeService {
         VerificationCodeExample example = new VerificationCodeExample();
         VerificationCodeExample.Criteria criteria = example.createCriteria();
         criteria.andEmailEqualTo(codeValidReq.getEmail()).
-                andAtGreaterThan(new Date(new Date().getTime() - 60 * 1000));
+                andAtGreaterThan(new Date(new Date().getTime() - 600 * 1000));
         List<VerificationCode> verificationCodeList = verificationCodeMapper.selectByExample(example);
 
         if (verificationCodeList != null && verificationCodeList.size() > 0) {

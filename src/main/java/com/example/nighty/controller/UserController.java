@@ -50,9 +50,8 @@ public class UserController {
     /**
      * Login
      */
-    @RequestMapping(value = "login", method = RequestMethod.POST)
-    @ResponseBody
-    public ServerResponse<UserLoginResp> login(HttpSession session, UserLoginReq req) {
+    @PostMapping(value = "login")
+    public ServerResponse<UserLoginResp> login(HttpSession session, @RequestBody UserLoginReq req) {
         req.setPassword(DigestUtils.md5DigestAsHex(req.getPassword().getBytes()));
         ServerResponse<UserLoginResp> resp = userService.login(req);
         if (resp.isSuccess()) {
@@ -75,10 +74,8 @@ public class UserController {
     /**
      * Logout
      */
-    @RequestMapping(value = "logout", method = RequestMethod.POST)
-    @ResponseBody
-    public ServerResponse<String> logout(HttpServletRequest request) {
-        String token = request.getHeader("token");
+    @GetMapping("logout/{token}")
+    public ServerResponse<String> logout(@PathVariable String token) {
         if (token == null || token.isEmpty()) {
             return ServerResponse.createByErrorMessage("Logout failed because of empty token");
         }
@@ -95,9 +92,8 @@ public class UserController {
     /**
      * Register
      */
-    @RequestMapping(value = "register", method = RequestMethod.POST)
-    @ResponseBody
-    public ServerResponse<UserLoginResp> register(UserRegisterReq user) {
+    @PostMapping(value = "register")
+    public ServerResponse<UserLoginResp> register(@RequestBody UserRegisterReq user) {
 
         //verify email verification code
         CodeValidReq code = new CodeValidReq();
@@ -116,23 +112,16 @@ public class UserController {
     /**
      * get the information of current user
      */
-    @RequestMapping(value = "get_user_info", method = RequestMethod.GET)
-    @ResponseBody
-    public ServerResponse getUserInfo(HttpServletRequest request) {
-        User currentUser = (User) request.getSession().getAttribute(Const.CURRENT_USER);
-        if (currentUser == null) {
-            LOG.info("token is invalid or incorrect");
-            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "The user has not logged in");
-        }
-        return userService.getInformation(currentUser.getId());
+    @GetMapping(value = "get_user_info/{id}")
+    public ServerResponse getUserInfo(@PathVariable Long id ) {
+        return userService.getInformation(id);
     }
 
     /**
      * Reset Password
      */
     @PostMapping(value = "reset_password")
-    @ResponseBody
-    public ServerResponse resetPassword(UserResetPasswordReq req, HttpServletRequest request) {
+    public ServerResponse resetPassword(@RequestBody UserResetPasswordReq req, HttpServletRequest request) {
         User currentUser = (User) request.getSession().getAttribute(Const.CURRENT_USER);
         if (currentUser == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "The user has not logged in");
@@ -146,9 +135,8 @@ public class UserController {
     /**
      * Update user information
      */
-    @RequestMapping(value = "update_information", method = RequestMethod.POST)
-    @ResponseBody
-    public ServerResponse update_information(HttpServletRequest request, UserUpdateReq user) {
+    @PostMapping(value = "update_information")
+    public ServerResponse update_information(HttpServletRequest request, @RequestBody UserUpdateReq user) {
         User currentUser = (User) request.getSession().getAttribute(Const.CURRENT_USER);
         if (currentUser == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "The user has not logged in");
