@@ -11,6 +11,8 @@ import com.example.nighty.domain.RoleUser;
 import com.example.nighty.domain.RoleUserExample;
 import com.example.nighty.domain.User;
 import com.example.nighty.domain.UserExample;
+import com.example.nighty.exception.BusinessException;
+import com.example.nighty.exception.BusinessExceptionCode;
 import com.example.nighty.mapper.RoleUserMapper;
 import com.example.nighty.mapper.UserMapper;
 import com.example.nighty.util.CopyUtil;
@@ -51,7 +53,7 @@ public class UserService {
         if (ObjectUtils.isEmpty(userDB)) {
             //Username does not exist
             LOG.info("Username does not exist, {}", req.getUsername());
-            return ServerResponse.createByErrorMessage("Username does not exist");
+            throw new BusinessException(BusinessExceptionCode.LOGIN_USER_ERROR);
         } else {
             if (userDB.getPassword().equals(req.getPassword())) {
                 //Login succeeded
@@ -69,7 +71,7 @@ public class UserService {
             } else {
                 //Incorrect password
                 LOG.info("Incorrect password, wrong password{}, password in database: {}", req.getPassword(), userDB.getPassword());
-                return ServerResponse.createByErrorMessage("Incorrect password");
+                throw new BusinessException(BusinessExceptionCode.LOGIN_USER_ERROR);
             }
         }
     }

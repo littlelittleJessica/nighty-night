@@ -11,6 +11,7 @@ public enum BusinessExceptionCode {
     EMAIL_CODE_TOO_FREQUENT("email send too frequent"),
     EMAIL_CODE_ERROR("verification code is incorrect"),
     EMAIL_CODE_EXPIRED("verification code is expired or invalid"),
+    LOGIN_USER_ERROR("Wrong username or password");
     ;
 
     private String desc;
