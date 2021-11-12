@@ -1,22 +1,18 @@
 package com.example.nighty.service;
 
-import com.example.nighty.Req.UserLoginReq;
-import com.example.nighty.Req.UserRegisterReq;
-import com.example.nighty.Req.UserResetPasswordReq;
-import com.example.nighty.Req.UserUpdateReq;
+import com.example.nighty.Req.*;
 import com.example.nighty.Resp.UserLoginResp;
 import com.example.nighty.Resp.UserUpdateResp;
 import com.example.nighty.common.ServerResponse;
-import com.example.nighty.domain.RoleUser;
-import com.example.nighty.domain.RoleUserExample;
-import com.example.nighty.domain.User;
-import com.example.nighty.domain.UserExample;
+import com.example.nighty.domain.*;
 import com.example.nighty.exception.BusinessException;
 import com.example.nighty.exception.BusinessExceptionCode;
 import com.example.nighty.mapper.RoleUserMapper;
 import com.example.nighty.mapper.UserMapper;
 import com.example.nighty.util.CopyUtil;
 import com.example.nighty.common.Const;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -223,4 +219,28 @@ public class UserService {
         }
         return ServerResponse.createByErrorMessage("Update information failed");
     }
+
+    /**
+     * List all users for admin
+     */
+    public PageReq listAllUsers(PageReq pageReq) {
+        PageHelper.startPage(pageReq.getPage(), pageReq.getSize());
+        UserExample userExample = new UserExample();
+        userExample.createCriteria();
+        List<User> userList = userMapper.selectByExample(userExample);
+        PageInfo<User> pageInfo = new PageInfo<>(userList);
+        pageReq.setTotal(pageInfo.getTotal());
+        pageReq.setList(userList);
+        return pageReq;
+
+    }
+
+    /**
+     * admin delete user
+     */
+    public void deleteUser(Long id) {
+        userMapper.deleteByPrimaryKey(id);
+    }
 }
+
+

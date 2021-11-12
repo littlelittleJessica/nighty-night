@@ -3,7 +3,7 @@ package com.example.nighty.domain;
 import java.util.ArrayList;
 import java.util.List;
 
-public class  RecordExample {
+public class RecordExample {
     protected String orderByClause;
 
     protected boolean distinct;

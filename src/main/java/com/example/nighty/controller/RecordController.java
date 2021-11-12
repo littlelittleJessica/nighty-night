@@ -24,7 +24,7 @@ public class RecordController {
     /**
      * List the record for recent five days
      */
-    @RequestMapping("list/{userId}")
+    @GetMapping("list/{userId}")
     public ServerResponse List(@PathVariable Long userId) {
         PageReq pageReq = new PageReq();
         pageReq.setPage(1);
@@ -36,7 +36,7 @@ public class RecordController {
     /**
      * save (insert and update)
      */
-    @RequestMapping("save")
+    @PostMapping("save")
     public ServerResponse save(@RequestBody RecordReq recordReq) {
         return recordService.save(recordReq);
     }
@@ -44,7 +44,7 @@ public class RecordController {
     /**
      * delete
      */
-    @RequestMapping("delete/{recordId}")
+    @DeleteMapping("delete/{recordId}")
     public ServerResponse delete(@PathVariable Long recordId) {
         return recordService.delete(recordId);
     }

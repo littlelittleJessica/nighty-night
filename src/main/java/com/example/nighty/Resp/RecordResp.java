@@ -1,6 +1,7 @@
 package com.example.nighty.Resp;
 
 public class RecordResp {
+    private Long id;
 
     private Long userId;
 
@@ -15,6 +16,14 @@ public class RecordResp {
     private String dream;
 
     private String evaluation;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public Long getUserId() {
         return userId;
@@ -74,11 +83,12 @@ public class RecordResp {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("RecordReq{");
-        sb.append("userId=").append(userId);
-        sb.append(", date=").append(date);
-        sb.append(", sleepTime=").append(sleepTime);
-        sb.append(", wakeupTime=").append(wakeupTime);
+        final StringBuilder sb = new StringBuilder("RecordResp{");
+        sb.append("id=").append(id);
+        sb.append(", userId=").append(userId);
+        sb.append(", date='").append(date).append('\'');
+        sb.append(", sleepTime='").append(sleepTime).append('\'');
+        sb.append(", wakeupTime='").append(wakeupTime).append('\'');
         sb.append(", emotion='").append(emotion).append('\'');
         sb.append(", dream='").append(dream).append('\'');
         sb.append(", evaluation='").append(evaluation).append('\'');

@@ -149,4 +149,23 @@ public class UserController {
         return response;
     }
 
+    /**
+     * List all users for admin
+     */
+    @GetMapping(value="admin/list-user")
+    public ServerResponse listAllUsers(){
+        PageReq pageReq = new PageReq();
+        pageReq.setPage(1);
+        pageReq.setSize(8);
+        return ServerResponse.createBySuccess("Query user list success", userService.listAllUsers(pageReq));
+    }
+
+    /**
+     * admin delete a user
+     */
+    @DeleteMapping(value = "admin/delete-user/{id}")
+    public ServerResponse deleteUser(@PathVariable Long id){
+        userService.deleteUser(id);
+        return ServerResponse.createBySuccessMessage("Delete user succeeded");
+    }
 }
