@@ -4,15 +4,11 @@ import com.example.nighty.Req.PageReq;
 import com.example.nighty.common.ServerResponse;
 import com.example.nighty.domain.Voice;
 import com.example.nighty.service.VoiceService;
-import com.example.nighty.util.UuidUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
-import java.io.File;
-import java.io.IOException;
 
 /**
  * @Description
@@ -33,10 +29,10 @@ public class VoiceController {
      * List all voice by category
      */
     @GetMapping("list/{category}")
-    public ServerResponse listByCategory(@PathVariable String category) {
+    public ServerResponse listByCategory(@PathVariable String category, @RequestBody PageReq page) {
         PageReq pageReq = new PageReq();
-        pageReq.setPage(1);
-        pageReq.setSize(8);
+        pageReq.setPage(page.getPage());
+        pageReq.setSize(page.getSize());
         return ServerResponse.createBySuccess("Query voice list success", voiceService.listByCategory(pageReq, category));
     }
 
@@ -44,10 +40,10 @@ public class VoiceController {
      * search voice by name
      */
     @GetMapping("search/{name}")
-    public ServerResponse searchByName(@PathVariable String name) {
+    public ServerResponse searchByName(@PathVariable String name, @RequestBody PageReq page) {
         PageReq pageReq = new PageReq();
-        pageReq.setPage(1);
-        pageReq.setSize(8);
+        pageReq.setPage(page.getPage());
+        pageReq.setSize(page.getSize());
         return ServerResponse.createBySuccess("Search voice list success", voiceService.searchByName(pageReq, name));
     }
 
@@ -67,31 +63,4 @@ public class VoiceController {
         voiceService.delete(id);
         return ServerResponse.createBySuccessMessage("Delete voice succeeded");
     }
-
-    /**
-     * save the cover of the voice
-     * todo:上传oss直接传链接
-     */
-    @RequestMapping("saveCover")
-    @ResponseBody
-    public ServerResponse saveCover(MultipartFile fileImage, Long id) throws IOException {
-        LOG.info(fileImage.getOriginalFilename());
-
-        final String imagePathRoot = "D:\\CS353\\cover\\";
-        File file = new File(imagePathRoot);
-
-        if (!file.exists()) {
-            file.mkdirs();
-        }
-
-        String fileName = fileImage.getOriginalFilename();
-        String fileType = fileName.substring(fileName.lastIndexOf("."));
-        String uuid = UuidUtil.getShortUuid();
-        String imageFilePath = imagePathRoot + uuid + fileType;
-        fileImage.transferTo(new File(imageFilePath));
-
-        return voiceService.saveCover(imageFilePath, id);
-    }
-
-
 }

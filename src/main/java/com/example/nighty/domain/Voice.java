@@ -7,9 +7,11 @@ public class Voice {
 
     private String cover;
 
+    private String voice;
+
     private String description;
 
-    private Integer time;
+    private String time;
 
     private String category;
 
@@ -37,6 +39,14 @@ public class Voice {
         this.cover = cover;
     }
 
+    public String getVoice() {
+        return voice;
+    }
+
+    public void setVoice(String voice) {
+        this.voice = voice;
+    }
+
     public String getDescription() {
         return description;
     }
@@ -45,11 +55,11 @@ public class Voice {
         this.description = description;
     }
 
-    public Integer getTime() {
+    public String getTime() {
         return time;
     }
 
-    public void setTime(Integer time) {
+    public void setTime(String time) {
         this.time = time;
     }
 
@@ -70,6 +80,7 @@ public class Voice {
         sb.append(", id=").append(id);
         sb.append(", name=").append(name);
         sb.append(", cover=").append(cover);
+        sb.append(", voice=").append(voice);
         sb.append(", description=").append(description);
         sb.append(", time=").append(time);
         sb.append(", category=").append(category);

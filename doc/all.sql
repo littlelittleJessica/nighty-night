@@ -36,8 +36,9 @@ create table `voice`
     `id`          bigint auto_increment not null comment 'id',
     `name`        varchar(50)           not null comment 'name',
     `cover`       varchar(200) comment 'cover url',
+    `voice`       varchar(200) comment 'voice url',
     `description` varchar(2000) comment 'description',
-    `time`        int default 0 comment 'time|second',
+    `time`        varchar(50)           not null comment 'time',
     `category`    char(1) comment 'category|enum[VoiceCategory]：MUSIC("M", "Light Music"),STORY("S", "Sleep Story"),WHITE_NOISE("W", "White Noise")',
     primary key (`id`)
 ) engine = innodb
@@ -123,13 +124,8 @@ create table `file`
     `size`        int comment 'size|Byte',
     `created_at`  datetime(3) comment 'created time',
     `updated_at`  datetime(3) comment 'updated time',
-    `shard_index` int comment '已上传分片',
-    `shard_size`  int comment '分片大小|B',
-    `shard_total` int comment '分片总数',
-    `key`         varchar(32) comment '文件标识',
     primary key (`id`),
-    unique key `path_unique` (`path`),
-    unique key `key` (`key`)
+    unique key `path_unique` (`path`)
 ) engine = innodb
   default charset = utf8mb4 comment ='文件';
 
@@ -152,3 +148,15 @@ BAD("B", "Bad"), TERRIBLE("T", "Terrible")',
     primary key (`id`)
 ) engine = innodb
   default charset = utf8mb4 comment ='sleep record';
+
+# diary
+drop table if exists `t_article`;
+create table `t_article`
+(
+    `aid`   bigint auto_increment not null comment 'article_id',
+    `title`  varchar(200) comment 'article title',
+    `content` longtext not null comment 'content',
+    `uid` bigint                not null comment 'user|id',
+    primary key (`aid`)
+) engine = innodb
+  default charset = utf8mb4 comment ='article';

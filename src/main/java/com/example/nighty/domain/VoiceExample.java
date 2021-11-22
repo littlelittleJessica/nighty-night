@@ -304,6 +304,76 @@ public class VoiceExample {
             return (Criteria) this;
         }
 
+        public Criteria andVoiceIsNull() {
+            addCriterion("voice is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andVoiceIsNotNull() {
+            addCriterion("voice is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andVoiceEqualTo(String value) {
+            addCriterion("voice =", value, "voice");
+            return (Criteria) this;
+        }
+
+        public Criteria andVoiceNotEqualTo(String value) {
+            addCriterion("voice <>", value, "voice");
+            return (Criteria) this;
+        }
+
+        public Criteria andVoiceGreaterThan(String value) {
+            addCriterion("voice >", value, "voice");
+            return (Criteria) this;
+        }
+
+        public Criteria andVoiceGreaterThanOrEqualTo(String value) {
+            addCriterion("voice >=", value, "voice");
+            return (Criteria) this;
+        }
+
+        public Criteria andVoiceLessThan(String value) {
+            addCriterion("voice <", value, "voice");
+            return (Criteria) this;
+        }
+
+        public Criteria andVoiceLessThanOrEqualTo(String value) {
+            addCriterion("voice <=", value, "voice");
+            return (Criteria) this;
+        }
+
+        public Criteria andVoiceLike(String value) {
+            addCriterion("voice like", value, "voice");
+            return (Criteria) this;
+        }
+
+        public Criteria andVoiceNotLike(String value) {
+            addCriterion("voice not like", value, "voice");
+            return (Criteria) this;
+        }
+
+        public Criteria andVoiceIn(List<String> values) {
+            addCriterion("voice in", values, "voice");
+            return (Criteria) this;
+        }
+
+        public Criteria andVoiceNotIn(List<String> values) {
+            addCriterion("voice not in", values, "voice");
+            return (Criteria) this;
+        }
+
+        public Criteria andVoiceBetween(String value1, String value2) {
+            addCriterion("voice between", value1, value2, "voice");
+            return (Criteria) this;
+        }
+
+        public Criteria andVoiceNotBetween(String value1, String value2) {
+            addCriterion("voice not between", value1, value2, "voice");
+            return (Criteria) this;
+        }
+
         public Criteria andDescriptionIsNull() {
             addCriterion("description is null");
             return (Criteria) this;
@@ -384,52 +454,62 @@ public class VoiceExample {
             return (Criteria) this;
         }
 
-        public Criteria andTimeEqualTo(Integer value) {
+        public Criteria andTimeEqualTo(String value) {
             addCriterion("`time` =", value, "time");
             return (Criteria) this;
         }
 
-        public Criteria andTimeNotEqualTo(Integer value) {
+        public Criteria andTimeNotEqualTo(String value) {
             addCriterion("`time` <>", value, "time");
             return (Criteria) this;
         }
 
-        public Criteria andTimeGreaterThan(Integer value) {
+        public Criteria andTimeGreaterThan(String value) {
             addCriterion("`time` >", value, "time");
             return (Criteria) this;
         }
 
-        public Criteria andTimeGreaterThanOrEqualTo(Integer value) {
+        public Criteria andTimeGreaterThanOrEqualTo(String value) {
             addCriterion("`time` >=", value, "time");
             return (Criteria) this;
         }
 
-        public Criteria andTimeLessThan(Integer value) {
+        public Criteria andTimeLessThan(String value) {
             addCriterion("`time` <", value, "time");
             return (Criteria) this;
         }
 
-        public Criteria andTimeLessThanOrEqualTo(Integer value) {
+        public Criteria andTimeLessThanOrEqualTo(String value) {
             addCriterion("`time` <=", value, "time");
             return (Criteria) this;
         }
 
-        public Criteria andTimeIn(List<Integer> values) {
+        public Criteria andTimeLike(String value) {
+            addCriterion("`time` like", value, "time");
+            return (Criteria) this;
+        }
+
+        public Criteria andTimeNotLike(String value) {
+            addCriterion("`time` not like", value, "time");
+            return (Criteria) this;
+        }
+
+        public Criteria andTimeIn(List<String> values) {
             addCriterion("`time` in", values, "time");
             return (Criteria) this;
         }
 
-        public Criteria andTimeNotIn(List<Integer> values) {
+        public Criteria andTimeNotIn(List<String> values) {
             addCriterion("`time` not in", values, "time");
             return (Criteria) this;
         }
 
-        public Criteria andTimeBetween(Integer value1, Integer value2) {
+        public Criteria andTimeBetween(String value1, String value2) {
             addCriterion("`time` between", value1, value2, "time");
             return (Criteria) this;
         }
 
-        public Criteria andTimeNotBetween(Integer value1, Integer value2) {
+        public Criteria andTimeNotBetween(String value1, String value2) {
             addCriterion("`time` not between", value1, value2, "time");
             return (Criteria) this;
         }

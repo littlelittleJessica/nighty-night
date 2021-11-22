@@ -153,10 +153,10 @@ public class UserController {
      * List all users for admin
      */
     @GetMapping(value="admin/list-user")
-    public ServerResponse listAllUsers(){
+    public ServerResponse listAllUsers(@RequestBody PageReq page){
         PageReq pageReq = new PageReq();
-        pageReq.setPage(1);
-        pageReq.setSize(8);
+        pageReq.setPage(page.getPage());
+        pageReq.setSize(page.getSize());
         return ServerResponse.createBySuccess("Query user list success", userService.listAllUsers(pageReq));
     }
 

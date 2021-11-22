@@ -5,8 +5,9 @@
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="cover" jdbcType="VARCHAR" property="cover" />
+    <result column="voice" jdbcType="VARCHAR" property="voice" />
     <result column="description" jdbcType="VARCHAR" property="description" />
-    <result column="time" jdbcType="INTEGER" property="time" />
+    <result column="time" jdbcType="VARCHAR" property="time" />
     <result column="category" jdbcType="CHAR" property="category" />
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -68,7 +69,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, `name`, cover, description, `time`, category
+    id, `name`, cover, voice, description, `time`, category
   </sql>
   <select id="selectByExample" parameterType="com.example.nighty.domain.VoiceExample" resultMap="BaseResultMap">
     select
@@ -102,11 +103,11 @@
   </delete>
   <insert id="insert" parameterType="com.example.nighty.domain.Voice">
     insert into voice (id, `name`, cover, 
-      description, `time`, category
-      )
+      voice, description, `time`, 
+      category)
     values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{cover,jdbcType=VARCHAR}, 
-      #{description,jdbcType=VARCHAR}, #{time,jdbcType=INTEGER}, #{category,jdbcType=CHAR}
-      )
+      #{voice,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{time,jdbcType=VARCHAR}, 
+      #{category,jdbcType=CHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.example.nighty.domain.Voice">
     insert into voice
@@ -119,6 +120,9 @@
       </if>
       <if test="cover != null">
         cover,
+      </if>
+      <if test="voice != null">
+        voice,
       </if>
       <if test="description != null">
         description,
@@ -140,11 +144,14 @@
       <if test="cover != null">
         #{cover,jdbcType=VARCHAR},
       </if>
+      <if test="voice != null">
+        #{voice,jdbcType=VARCHAR},
+      </if>
       <if test="description != null">
         #{description,jdbcType=VARCHAR},
       </if>
       <if test="time != null">
-        #{time,jdbcType=INTEGER},
+        #{time,jdbcType=VARCHAR},
       </if>
       <if test="category != null">
         #{category,jdbcType=CHAR},
@@ -169,11 +176,14 @@
       <if test="record.cover != null">
         cover = #{record.cover,jdbcType=VARCHAR},
       </if>
+      <if test="record.voice != null">
+        voice = #{record.voice,jdbcType=VARCHAR},
+      </if>
       <if test="record.description != null">
         description = #{record.description,jdbcType=VARCHAR},
       </if>
       <if test="record.time != null">
-        `time` = #{record.time,jdbcType=INTEGER},
+        `time` = #{record.time,jdbcType=VARCHAR},
       </if>
       <if test="record.category != null">
         category = #{record.category,jdbcType=CHAR},
@@ -188,8 +198,9 @@
     set id = #{record.id,jdbcType=BIGINT},
       `name` = #{record.name,jdbcType=VARCHAR},
       cover = #{record.cover,jdbcType=VARCHAR},
+      voice = #{record.voice,jdbcType=VARCHAR},
       description = #{record.description,jdbcType=VARCHAR},
-      `time` = #{record.time,jdbcType=INTEGER},
+      `time` = #{record.time,jdbcType=VARCHAR},
       category = #{record.category,jdbcType=CHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -204,11 +215,14 @@
       <if test="cover != null">
         cover = #{cover,jdbcType=VARCHAR},
       </if>
+      <if test="voice != null">
+        voice = #{voice,jdbcType=VARCHAR},
+      </if>
       <if test="description != null">
         description = #{description,jdbcType=VARCHAR},
       </if>
       <if test="time != null">
-        `time` = #{time,jdbcType=INTEGER},
+        `time` = #{time,jdbcType=VARCHAR},
       </if>
       <if test="category != null">
         category = #{category,jdbcType=CHAR},
@@ -220,8 +234,9 @@
     update voice
     set `name` = #{name,jdbcType=VARCHAR},
       cover = #{cover,jdbcType=VARCHAR},
+      voice = #{voice,jdbcType=VARCHAR},
       description = #{description,jdbcType=VARCHAR},
-      `time` = #{time,jdbcType=INTEGER},
+      `time` = #{time,jdbcType=VARCHAR},
       category = #{category,jdbcType=CHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>

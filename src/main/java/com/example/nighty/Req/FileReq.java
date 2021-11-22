@@ -22,18 +22,6 @@ public class FileReq {
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date updatedAt;
 
-    private Integer shardIndex;
-
-    private Integer shardSize;
-
-    private Integer shardTotal;
-
-    private String key;
-
-    private String shard;
-
-    private String vod;
-
     public String getId() {
         return id;
     }
@@ -82,62 +70,6 @@ public class FileReq {
         this.createdAt = createdAt;
     }
 
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public String getShard() {
-        return shard;
-    }
-
-    public void setShard(String shard) {
-        this.shard = shard;
-    }
-
-    public Integer getShardIndex() {
-        return shardIndex;
-    }
-
-    public void setShardIndex(Integer shardIndex) {
-        this.shardIndex = shardIndex;
-    }
-
-    public Integer getShardSize() {
-        return shardSize;
-    }
-
-    public void setShardSize(Integer shardSize) {
-        this.shardSize = shardSize;
-    }
-
-    public Integer getShardTotal() {
-        return shardTotal;
-    }
-
-    public void setShardTotal(Integer shardTotal) {
-        this.shardTotal = shardTotal;
-    }
-
-    public String getKey() {
-        return key;
-    }
-
-    public void setKey(String key) {
-        this.key = key;
-    }
-
-    public String getVod() {
-        return vod;
-    }
-
-    public void setVod(String vod) {
-        this.vod = vod;
-    }
-
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("FileDto{");
@@ -148,12 +80,6 @@ public class FileReq {
         sb.append(", size=").append(size);
         sb.append(", createdAt=").append(createdAt);
         sb.append(", updatedAt=").append(updatedAt);
-        sb.append(", shardIndex=").append(shardIndex);
-        sb.append(", shardSize=").append(shardSize);
-        sb.append(", shardTotal=").append(shardTotal);
-        sb.append(", key='").append(key).append('\'');
-        sb.append(", shard='").append(shard).append('\'');
-        sb.append(", vod='").append(vod).append('\'');
         sb.append('}');
         return sb.toString();
     }

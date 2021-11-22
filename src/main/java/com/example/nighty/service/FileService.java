@@ -26,11 +26,10 @@ public class FileService {
      */
     public void save(FileReq fileReq) {
         File file = CopyUtil.copy(fileReq, File.class);
-        File fileDb = selectByKey(fileReq.getKey());
+        File fileDb = fileMapper.selectByPrimaryKey(fileReq.getId());
         if (fileDb == null) {
             this.insert(file);
         } else {
-            fileDb.setShardIndex(fileReq.getShardIndex());
             this.update(fileDb);
         }
     }
@@ -61,26 +60,4 @@ public class FileService {
     public void delete(String id) {
         fileMapper.deleteByPrimaryKey(id);
     }
-
-    /**
-     * search database record by file key
-     */
-    public File selectByKey(String key) {
-        FileExample example = new FileExample();
-        example.createCriteria().andKeyEqualTo(key);
-        List<File> fileList = fileMapper.selectByExample(example);
-        if (CollectionUtils.isEmpty(fileList)) {
-            return null;
-        } else {
-            return fileList.get(0);
-        }
-    }
-
-    /**
-     * search database record by file key
-     */
-    public FileReq findByKey(String key) {
-        return CopyUtil.copy(selectByKey(key), FileReq.class);
-    }
-
 }

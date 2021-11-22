@@ -39,13 +39,13 @@
 
 <!--        <table tableName="user" domainObjectName="User"/>-->
 <!--        <table tableName="verification_code" domainObjectName="VerificationCode"/>-->
-<!--        <table tableName="voice" domainObjectName="Voice"/>-->
+        <table tableName="voice" domainObjectName="Voice"/>
 <!--        <table tableName="voice_file" domainObjectName="VoiceFile"/>-->
 <!--        <table tableName="user_voice" domainObjectName="UserVoice"/>-->
 <!--        <table tableName="role" domainObjectName="role"/>-->
 <!--        <table tableName="role_user" domainObjectName="RoleUser"/>-->
 <!--        <table tableName="daily" domainObjectName="Daily"/>-->
 <!--        <table tableName="file" domainObjectName="File"/>-->
-        <table tableName="record" domainObjectName="Record"/>
+<!--        <table tableName="record" domainObjectName="Record"/>-->
     </context>
 </generatorConfiguration>
