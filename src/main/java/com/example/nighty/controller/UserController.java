@@ -137,11 +137,6 @@ public class UserController {
      */
     @PostMapping(value = "update_information")
     public ServerResponse update_information(HttpServletRequest request, @RequestBody UserUpdateReq user) {
-        User currentUser = (User) request.getSession().getAttribute(Const.CURRENT_USER);
-        if (currentUser == null) {
-            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "The user has not logged in");
-        }
-
         ServerResponse<UserUpdateResp> response = userService.updateInformation(user);
         if (response.isSuccess()) {
             request.getSession().setAttribute(Const.CURRENT_USER, response.getData());

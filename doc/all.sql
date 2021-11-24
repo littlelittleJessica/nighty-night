@@ -94,14 +94,6 @@ create table `role_user`
 ) engine = innodb
   default charset = utf8mb4 comment ='role and user related';
 
-insert into `role_user`
-values ('1', '1', '13');
-insert into `role_user`
-values ('2', '2', '1');
-insert into `role_user`
-values ('3', '2', '12');
-
-
 # daily
 drop table if exists `daily`;
 create table `daily`

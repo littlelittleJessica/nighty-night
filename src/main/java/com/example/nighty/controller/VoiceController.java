@@ -28,7 +28,7 @@ public class VoiceController {
     /**
      * List all voice by category
      */
-    @GetMapping("list/{category}")
+    @PostMapping("list/{category}")
     public ServerResponse listByCategory(@PathVariable String category, @RequestBody PageReq page) {
         PageReq pageReq = new PageReq();
         pageReq.setPage(page.getPage());
