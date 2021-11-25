@@ -1,11 +1,9 @@
 package com.example.nighty.domain;
 
-public class Daily {
+public class DailyContent {
     private Long id;
 
-    private String image;
-
-    private String title;
+    private String content;
 
     public Long getId() {
         return id;
@@ -15,20 +13,12 @@ public class Daily {
         this.id = id;
     }
 
-    public String getImage() {
-        return image;
+    public String getContent() {
+        return content;
     }
 
-    public void setImage(String image) {
-        this.image = image;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
+    public void setContent(String content) {
+        this.content = content;
     }
 
     @Override
@@ -38,8 +28,7 @@ public class Daily {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", image=").append(image);
-        sb.append(", title=").append(title);
+        sb.append(", content=").append(content);
         sb.append("]");
         return sb.toString();
     }

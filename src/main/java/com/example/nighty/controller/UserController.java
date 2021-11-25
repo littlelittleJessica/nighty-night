@@ -120,13 +120,8 @@ public class UserController {
     /**
      * Reset Password
      */
-    @PostMapping(value = "reset_password")
-    public ServerResponse resetPassword(@RequestBody UserResetPasswordReq req, HttpServletRequest request) {
-        User currentUser = (User) request.getSession().getAttribute(Const.CURRENT_USER);
-        if (currentUser == null) {
-            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "The user has not logged in");
-        }
-        Long id = ((User) request.getSession().getAttribute(Const.CURRENT_USER)).getId();
+    @PostMapping(value = "reset_password/{id}")
+    public ServerResponse resetPassword(@RequestBody UserResetPasswordReq req, @PathVariable Long id) {
         req.setPasswordOld(DigestUtils.md5DigestAsHex(req.getPasswordOld().getBytes()));
         return userService.resetPassword(req, id);
 

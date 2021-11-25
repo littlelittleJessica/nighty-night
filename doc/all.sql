@@ -99,11 +99,21 @@ drop table if exists `daily`;
 create table `daily`
 (
     `id`   bigint auto_increment not null comment 'id',
-    `pic`  varchar(200) comment 'picture url',
-    `date` date                  not null comment 'date',
+    `image`  varchar(200) comment 'picture url',
+    `title` varchar(200) comment 'title',
     primary key (`id`)
 ) engine = innodb
   default charset = utf8mb4 comment ='daily';
+
+# daily content
+drop table if exists `daily_content`;
+create table `daily_content`
+(
+    `id`   bigint auto_increment not null comment 'daily_id',
+    `content` mediumtext not null comment 'content',
+    primary key (`id`)
+) engine = innodb
+  default charset = utf8mb4 comment ='daily content';
 
 # file
 drop table if exists `file`;

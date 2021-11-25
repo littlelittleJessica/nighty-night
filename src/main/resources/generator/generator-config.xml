@@ -18,9 +18,9 @@
         </commentGenerator>
 
         <jdbcConnection driverClass="com.mysql.cj.jdbc.Driver"
-                        connectionURL="jdbc:mysql://localhost:3306/nighty?serverTimezone=UTC"
-                        userId="root"
-                        password="">
+                        connectionURL="jdbc:mysql://rm-wz9kol6933uwjjl08wo.mysql.rds.aliyuncs.com:3306/nighty?serverTimezone=UTC"
+                        userId="nighty"
+                        password="nightynight">
             <property name="nullCatalogMeansCurrent" value="true"/>
         </jdbcConnection>
 
@@ -39,12 +39,13 @@
 
 <!--        <table tableName="user" domainObjectName="User"/>-->
 <!--        <table tableName="verification_code" domainObjectName="VerificationCode"/>-->
-        <table tableName="voice" domainObjectName="Voice"/>
+<!--        <table tableName="voice" domainObjectName="Voice"/>-->
 <!--        <table tableName="voice_file" domainObjectName="VoiceFile"/>-->
 <!--        <table tableName="user_voice" domainObjectName="UserVoice"/>-->
 <!--        <table tableName="role" domainObjectName="role"/>-->
 <!--        <table tableName="role_user" domainObjectName="RoleUser"/>-->
-<!--        <table tableName="daily" domainObjectName="Daily"/>-->
+        <table tableName="daily" domainObjectName="Daily"/>
+        <table tableName="daily_content" domainObjectName="DailyContent"/>
 <!--        <table tableName="file" domainObjectName="File"/>-->
 <!--        <table tableName="record" domainObjectName="Record"/>-->
     </context>

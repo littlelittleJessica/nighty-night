@@ -1,6 +1,6 @@
-package com.example.nighty.domain;
+package com.example.nighty.Req;
 
-public class Daily {
+public class DailyReq {
     private Long id;
 
     private String image;

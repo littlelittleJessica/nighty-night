@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.example.nighty.mapper.DailyMapper">
-  <resultMap id="BaseResultMap" type="com.example.nighty.domain.Daily">
+<mapper namespace="com.example.nighty.mapper.DailyContentMapper">
+  <resultMap id="BaseResultMap" type="com.example.nighty.domain.DailyContent">
     <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="image" jdbcType="VARCHAR" property="image" />
-    <result column="title" jdbcType="VARCHAR" property="title" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.example.nighty.domain.DailyContent">
+    <result column="content" jdbcType="LONGVARCHAR" property="content" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -65,15 +66,20 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, image, title
+    id
   </sql>
-  <select id="selectByExample" parameterType="com.example.nighty.domain.DailyExample" resultMap="BaseResultMap">
+  <sql id="Blob_Column_List">
+    content
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.example.nighty.domain.DailyContentExample" resultMap="ResultMapWithBLOBs">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from daily
+    ,
+    <include refid="Blob_Column_List" />
+    from daily_content
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -81,101 +87,108 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.example.nighty.domain.DailyContentExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from daily_content
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
     select 
     <include refid="Base_Column_List" />
-    from daily
+    ,
+    <include refid="Blob_Column_List" />
+    from daily_content
     where id = #{id,jdbcType=BIGINT}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from daily
+    delete from daily_content
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <delete id="deleteByExample" parameterType="com.example.nighty.domain.DailyExample">
-    delete from daily
+  <delete id="deleteByExample" parameterType="com.example.nighty.domain.DailyContentExample">
+    delete from daily_content
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.example.nighty.domain.Daily">
-    insert into daily (id, image, title
-      )
-    values (#{id,jdbcType=BIGINT}, #{image,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}
-      )
+  <insert id="insert" parameterType="com.example.nighty.domain.DailyContent">
+    insert into daily_content (id, content)
+    values (#{id,jdbcType=BIGINT}, #{content,jdbcType=LONGVARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.example.nighty.domain.Daily">
-    insert into daily
+  <insert id="insertSelective" parameterType="com.example.nighty.domain.DailyContent">
+    insert into daily_content
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
       </if>
-      <if test="image != null">
-        image,
-      </if>
-      <if test="title != null">
-        title,
+      <if test="content != null">
+        content,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
         #{id,jdbcType=BIGINT},
       </if>
-      <if test="image != null">
-        #{image,jdbcType=VARCHAR},
-      </if>
-      <if test="title != null">
-        #{title,jdbcType=VARCHAR},
+      <if test="content != null">
+        #{content,jdbcType=LONGVARCHAR},
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.example.nighty.domain.DailyExample" resultType="java.lang.Long">
-    select count(*) from daily
+  <select id="countByExample" parameterType="com.example.nighty.domain.DailyContentExample" resultType="java.lang.Long">
+    select count(*) from daily_content
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update daily
+    update daily_content
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=BIGINT},
       </if>
-      <if test="record.image != null">
-        image = #{record.image,jdbcType=VARCHAR},
-      </if>
-      <if test="record.title != null">
-        title = #{record.title,jdbcType=VARCHAR},
+      <if test="record.content != null">
+        content = #{record.content,jdbcType=LONGVARCHAR},
       </if>
     </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update daily_content
+    set id = #{record.id,jdbcType=BIGINT},
+      content = #{record.content,jdbcType=LONGVARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update daily
-    set id = #{record.id,jdbcType=BIGINT},
-      image = #{record.image,jdbcType=VARCHAR},
-      title = #{record.title,jdbcType=VARCHAR}
+    update daily_content
+    set id = #{record.id,jdbcType=BIGINT}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.example.nighty.domain.Daily">
-    update daily
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.nighty.domain.DailyContent">
+    update daily_content
     <set>
-      <if test="image != null">
-        image = #{image,jdbcType=VARCHAR},
-      </if>
-      <if test="title != null">
-        title = #{title,jdbcType=VARCHAR},
+      <if test="content != null">
+        content = #{content,jdbcType=LONGVARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.example.nighty.domain.Daily">
-    update daily
-    set image = #{image,jdbcType=VARCHAR},
-      title = #{title,jdbcType=VARCHAR}
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.example.nighty.domain.DailyContent">
+    update daily_content
+    set content = #{content,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>
