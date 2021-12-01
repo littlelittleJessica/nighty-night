@@ -3,10 +3,7 @@ package com.example.nighty.service;
 import com.example.nighty.Req.DailyReq;
 import com.example.nighty.Req.PageReq;
 import com.example.nighty.common.ServerResponse;
-import com.example.nighty.domain.Daily;
-import com.example.nighty.domain.DailyContent;
-import com.example.nighty.domain.DailyContentExample;
-import com.example.nighty.domain.DailyExample;
+import com.example.nighty.domain.*;
 import com.example.nighty.mapper.DailyContentMapper;
 import com.example.nighty.mapper.DailyMapper;
 import com.example.nighty.util.CopyUtil;
@@ -45,6 +42,20 @@ public class DailyService {
         pageReq.setTotal(pageInfo.getTotal());
         pageReq.setList(dailies);
         return ServerResponse.createBySuccess("List daily succeeded", pageReq);
+    }
+
+    /**
+     * search daily by title
+     */
+    public PageReq searchByTitle(PageReq pageReq, String title) {
+        PageHelper.startPage(pageReq.getPage(), pageReq.getSize());
+        DailyExample dailyExample = new DailyExample();
+        dailyExample.createCriteria().andTitleLike("%" + title + "%");
+        List<Daily> dailyList = dailyMapper.selectByExample(dailyExample);
+        PageInfo<Daily> pageInfo = new PageInfo<>(dailyList);
+        pageReq.setTotal(pageInfo.getTotal());
+        pageReq.setList(dailyList);
+        return pageReq;
     }
 
     /**

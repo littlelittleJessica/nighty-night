@@ -22,7 +22,8 @@
 //                        "/user/logout",
 //                        "/test/**",
 //                        "/code/**",
-//                        "/voice/**"
+//                        "/voice/**",
+//                        "/admin/daily-content/**"
 //                );
 //    }
 //}

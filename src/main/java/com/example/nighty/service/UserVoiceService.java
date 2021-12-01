@@ -12,8 +12,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -37,28 +39,61 @@ public class UserVoiceService {
     /**
      * List the favorite voice of the user by category
      */
-    public PageReq listFavorite(User user, PageReq pageReq, String category) {
-
-        UserVoiceExample userVoiceExample = new UserVoiceExample();
-        userVoiceExample.createCriteria().andUserIdEqualTo(user.getId());
-        List<UserVoice> userVoiceList = userVoiceMapper.selectByExample(userVoiceExample);
-
-        Long[] voiceId = new Long[userVoiceList.size()];
-        if (!CollectionUtils.isEmpty(userVoiceList) && userVoiceList.size() > 0) {
-            for (int i = 0; i < voiceId.length; i++) {
-                voiceId[i] = userVoiceList.get(i).getVoiceId();
-            }
-        }
+    public PageReq listFavorite(Long userId, PageReq pageReq, String category) {
         PageHelper.startPage(pageReq.getPage(), pageReq.getSize());
         VoiceExample voiceExample = new VoiceExample();
-        voiceExample.createCriteria().andCategoryEqualTo(category)
-                .andIdIn(Arrays.asList(voiceId));
-        List<Voice> voiceList = voiceMapper.selectByExample(voiceExample);
+        UserVoiceExample example = new UserVoiceExample();
 
-        PageInfo<Voice> pageInfo = new PageInfo<>(voiceList);
-        pageReq.setTotal(pageInfo.getTotal());
-        pageReq.setList(voiceList);
-        return pageReq;
+        if ("All".equals(category)) {
+            String[] categorys = {"M", "S", "W"};
+            voiceExample.createCriteria().andCategoryIn(Arrays.asList(categorys));
+            List<Voice> voiceList = voiceMapper.selectByExample(voiceExample);
+            List<Long> voiceIds = new ArrayList<>();
+            for (Voice voice :
+                    voiceList) {
+                voiceIds.add(voice.getId());
+            }
+            example.createCriteria().andUserIdEqualTo(userId).andVoiceIdIn(voiceIds);
+            List<UserVoice> userVoiceList = userVoiceMapper.selectByExample(example);
+
+            List<Long> voiceFavorite = new ArrayList<>();
+            for (UserVoice uv :
+                    userVoiceList) {
+                voiceFavorite.add(uv.getVoiceId());
+            }
+            VoiceExample voiceExample1 = new VoiceExample();
+            voiceExample1.createCriteria().andIdIn(voiceFavorite);
+            List<Voice> voices = voiceMapper.selectByExample(voiceExample1);
+            PageInfo<Voice> pageInfo = new PageInfo<>(voices);
+            pageReq.setTotal(pageInfo.getTotal());
+            pageReq.setList(voices);
+            return pageReq;
+        } else if (!StringUtils.isEmpty(category) && category.length() > 0) {
+            voiceExample.createCriteria().andCategoryEqualTo(category);
+            List<Voice> voiceList = voiceMapper.selectByExample(voiceExample);
+            List<Long> voiceIds = new ArrayList<>();
+            for (Voice voice :
+                    voiceList) {
+                voiceIds.add(voice.getId());
+            }
+            example.createCriteria().andUserIdEqualTo(userId).andVoiceIdIn(voiceIds);
+            List<UserVoice> userVoiceList = userVoiceMapper.selectByExample(example);
+
+            List<Long> voiceFavorite = new ArrayList<>();
+            for (UserVoice uv :
+                    userVoiceList) {
+                voiceFavorite.add(uv.getVoiceId());
+            }
+            VoiceExample voiceExample1 = new VoiceExample();
+            voiceExample1.createCriteria().andIdIn(voiceFavorite);
+            List<Voice> voices = voiceMapper.selectByExample(voiceExample1);
+            PageInfo<Voice> pageInfo = new PageInfo<>(voices);
+            pageReq.setTotal(pageInfo.getTotal());
+            pageReq.setList(voices);
+            return pageReq;
+        } else {
+            return null;
+        }
     }
 
     /**

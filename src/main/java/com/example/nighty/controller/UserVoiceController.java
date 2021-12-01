@@ -35,14 +35,12 @@ public class UserVoiceController {
      */
     @PostMapping("list_favorite/{category}")
     public ServerResponse listFavorite(HttpServletRequest request, @PathVariable String category) {
-        User user = (User) request.getSession().getAttribute(Const.CURRENT_USER);
-        if (user == null) {
-            return ServerResponse.createByErrorMessage("The user has not logged in");
-        }
+        Long userId = Long.valueOf(request.getHeader("userId"));
+        LOG.info("****************************" + userId);
         PageReq pageReq = new PageReq();
         pageReq.setPage(1);
         pageReq.setSize(8);
-        return ServerResponse.createBySuccess("Query user favorite list success", userVoiceService.listFavorite(user, pageReq, category));
+        return ServerResponse.createBySuccess("Query user favorite list success", userVoiceService.listFavorite(userId, pageReq, category));
     }
 
     /**

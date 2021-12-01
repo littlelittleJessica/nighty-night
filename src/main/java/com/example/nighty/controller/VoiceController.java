@@ -39,7 +39,7 @@ public class VoiceController {
     /**
      * search voice by name
      */
-    @GetMapping("search/{name}")
+    @PostMapping("search/{name}")
     public ServerResponse searchByName(@PathVariable String name, @RequestBody PageReq page) {
         PageReq pageReq = new PageReq();
         pageReq.setPage(page.getPage());

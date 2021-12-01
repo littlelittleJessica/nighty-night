@@ -44,9 +44,9 @@
 <!--        <table tableName="user_voice" domainObjectName="UserVoice"/>-->
 <!--        <table tableName="role" domainObjectName="role"/>-->
 <!--        <table tableName="role_user" domainObjectName="RoleUser"/>-->
-        <table tableName="daily" domainObjectName="Daily"/>
-        <table tableName="daily_content" domainObjectName="DailyContent"/>
+<!--        <table tableName="daily" domainObjectName="Daily"/>-->
+<!--        <table tableName="daily_content" domainObjectName="DailyContent"/>-->
 <!--        <table tableName="file" domainObjectName="File"/>-->
-<!--        <table tableName="record" domainObjectName="Record"/>-->
+        <table tableName="record" domainObjectName="Record"/>
     </context>
 </generatorConfiguration>

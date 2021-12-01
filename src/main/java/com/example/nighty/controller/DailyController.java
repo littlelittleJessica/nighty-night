@@ -43,6 +43,17 @@ public class DailyController {
         return dailyService.show(id);
     }
 
+    /**
+     * search daily by title
+     */
+    @PostMapping("/search/{title}")
+    public ServerResponse searchByName(@PathVariable String title, @RequestBody PageReq page) {
+        PageReq pageReq = new PageReq();
+        pageReq.setPage(page.getPage());
+        pageReq.setSize(page.getSize());
+        return ServerResponse.createBySuccess("Search daily success", dailyService.searchByTitle(pageReq, title));
+    }
+
     @PostMapping("/save-content")
     public ServerResponse saveContent(@RequestBody DailyContent dailyContent) {
         return dailyService.saveContent(dailyContent);

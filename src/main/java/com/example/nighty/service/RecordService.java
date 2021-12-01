@@ -41,7 +41,7 @@ public class RecordService {
         List<Record> recordList = recordMapper.selectByExample(recordExample);
         List<RecordResp> recordRespList = CopyUtil.copyList(recordList, RecordResp.class);
 
-        return ServerResponse.createBySuccess("List recent 5 days record succeeded", recordRespList);
+        return ServerResponse.createBySuccess("List recent 7 days record succeeded", recordRespList);
     }
 
     /**

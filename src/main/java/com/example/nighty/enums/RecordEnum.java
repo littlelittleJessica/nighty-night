@@ -23,7 +23,7 @@ public enum RecordEnum {
 
     //evaluation
     AWESOME("A", "Awesome"),
-    Good("G", "Good"),
+    Good("g", "Good"),
     BAD("B", "Bad"),
     TERRIBLE("T", "Terrible");
 
