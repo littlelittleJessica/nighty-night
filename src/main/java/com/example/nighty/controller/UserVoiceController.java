@@ -34,12 +34,12 @@ public class UserVoiceController {
      * List the favorite voice of the user by category
      */
     @PostMapping("list_favorite/{category}")
-    public ServerResponse listFavorite(HttpServletRequest request, @PathVariable String category) {
+    public ServerResponse listFavorite(HttpServletRequest request, @PathVariable String category, @RequestBody PageReq page) {
         Long userId = Long.valueOf(request.getHeader("userId"));
         LOG.info("****************************" + userId);
         PageReq pageReq = new PageReq();
-        pageReq.setPage(1);
-        pageReq.setSize(8);
+        pageReq.setPage(page.getPage());
+        pageReq.setSize(page.getSize());
         return ServerResponse.createBySuccess("Query user favorite list success", userVoiceService.listFavorite(userId, pageReq, category));
     }
 
@@ -69,7 +69,7 @@ public class UserVoiceController {
     /**
      * Unfavorite voice
      */
-    @DeleteMapping(value = "unfavorite")
+    @PostMapping(value = "unfavorite")
     public ServerResponse unfavorite(@RequestBody UserVoice userVoice) {
         return userVoiceService.unfavorite(userVoice);
     }

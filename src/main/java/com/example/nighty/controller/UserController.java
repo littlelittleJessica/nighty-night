@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.example.nighty.Req.*;
 import com.example.nighty.Resp.UserLoginResp;
 import com.example.nighty.Resp.UserUpdateResp;
-import com.example.nighty.common.ResponseCode;
 import com.example.nighty.common.ServerResponse;
 import com.example.nighty.domain.User;
 import com.example.nighty.service.UserService;
@@ -142,7 +141,7 @@ public class UserController {
     /**
      * List all users for admin
      */
-    @GetMapping(value="admin/list-user")
+    @PostMapping(value="admin/list-user")
     public ServerResponse listAllUsers(@RequestBody PageReq page){
         PageReq pageReq = new PageReq();
         pageReq.setPage(page.getPage());

@@ -68,7 +68,7 @@ public class UserVoiceService {
             pageReq.setTotal(pageInfo.getTotal());
             pageReq.setList(voices);
             return pageReq;
-        } else if (!StringUtils.isEmpty(category) && category.length() > 0) {
+        } else if ("S".equals(category) || "W".equals(category) || "M".equals(category)) {
             voiceExample.createCriteria().andCategoryEqualTo(category);
             List<Voice> voiceList = voiceMapper.selectByExample(voiceExample);
             List<Long> voiceIds = new ArrayList<>();

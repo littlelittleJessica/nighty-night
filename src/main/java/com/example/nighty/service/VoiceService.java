@@ -29,10 +29,10 @@ public class VoiceService {
     /**
      * query voice by category
      */
-    public PageReq listByCategory(PageReq pageReq, String catogory) {
+    public PageReq listByCategory(PageReq pageReq, String category) {
         PageHelper.startPage(pageReq.getPage(), pageReq.getSize());
         VoiceExample voiceExample = new VoiceExample();
-        if ("All".equals(catogory)) {
+        if ("All".equals(category)) {
             String[] categorys = {"M", "S", "W"};
             voiceExample.createCriteria().andCategoryIn(Arrays.asList(categorys));
             List<Voice> voiceList = voiceMapper.selectByExample(voiceExample);
@@ -40,8 +40,8 @@ public class VoiceService {
             pageReq.setTotal(pageInfo.getTotal());
             pageReq.setList(voiceList);
             return pageReq;
-        } else if (!StringUtils.isEmpty(catogory) && catogory.length() > 0) {
-            voiceExample.createCriteria().andCategoryEqualTo(catogory);
+        } else if (!StringUtils.isEmpty(category) && category.length() > 0) {
+            voiceExample.createCriteria().andCategoryEqualTo(category);
             List<Voice> voiceList = voiceMapper.selectByExample(voiceExample);
             PageInfo<Voice> pageInfo = new PageInfo<>(voiceList);
             pageReq.setTotal(pageInfo.getTotal());
