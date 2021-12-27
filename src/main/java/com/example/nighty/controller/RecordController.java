@@ -4,12 +4,9 @@ import com.example.nighty.Req.PageReq;
 import com.example.nighty.Req.RecordReq;
 import com.example.nighty.common.ServerResponse;
 import com.example.nighty.service.RecordService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * @Description

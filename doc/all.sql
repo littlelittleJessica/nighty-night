@@ -18,7 +18,7 @@ drop table if exists `verification_code`;
 create table `verification_code`
 (
     `id`     bigint auto_increment not null comment 'id',
-    `email`  varchar(50)           not null comment 'email',
+    `email`  varchar(500)           not null comment 'email',
     `code`   char(6)               not null comment 'verification code',
     `at`     datetime(3)           not null comment 'created/sent time',
     `status` char(1)               not null comment 'status|enum[SmsStatusEnum]：USED("U", "used"), NOT_USED("N", "unused")',
