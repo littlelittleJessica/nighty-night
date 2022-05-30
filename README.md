@@ -1,7 +1,7 @@
 # **Nighty Night**
 ## Introduction
 
-Nighty Night is a website that provide the functions of aiding sleep and record sleep conditions. It also contains administration operations. The backend code is constructed with the frame SpringBoot. The database is based on MyBatis and the database connection uses Aliyun RDS. File management service uses Aliyun OSS.
+Nighty Night is a website that provide the functions of aiding sleep and record sleep conditions. It also contains administration operations. The server side is a SpringBoot project. The database is based on MyBatis and the database connection uses Aliyun RDS. File management service uses Aliyun OSS.
 
 Its main functions are **Voice of Night**, **Sleep Record**, **Sleep Diary** and **website background management**
 
@@ -56,7 +56,7 @@ src
 
 
 ### Contact
-Ruhan Yin: 446067482@qq.com
+Ruhan Yin: ruhanyin0725@gmail.com
 
 
 
